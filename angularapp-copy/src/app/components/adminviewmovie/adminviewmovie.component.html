@@ -1,0 +1,65 @@
+<div class="container">
+    <h1>Movie Management</h1>
+    
+    <button class="btn btn-add" (click)="addNewMovie()">
+      Add New Movie
+    </button>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <div class="movies-grid">
+      <div *ngFor="let movie of movies" class="movie-card">
+        <div class="movie-image">
+          <img 
+          [src]="'https://picsum.photos/200/300' + movie.title" 
+            alt="{{ movie.title }}"
+            onerror="this.src='https://via.placeholder.com/400x600?text=Movie+Poster'"
+          >
+        </div>
+        
+        <div class="movie-details">
+          <h2>{{ movie.title }}</h2>
+          
+          <div class="detail-row">
+            <strong>Genre:</strong> 
+            <span>{{ movie.genre }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <strong>Duration:</strong> 
+            <span>{{ movie.duration }} minutes</span>
+          </div>
+          
+          <div class="detail-row">
+            <strong>Ticket Price:</strong> 
+            <span>₹{{ movie.price }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <strong>Total Seats:</strong> 
+            <span>{{ movie.totalSeats }}</span>
+          </div>
+          
+          <div class="movie-actions">
+            <button 
+              class="btn btn-edit" 
+              (click)="updateMovie(movie)"
+            >
+              Edit
+            </button>
+            
+            <button 
+              class="btn btn-delete" 
+              (click)="deleteMovie(movie.id)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

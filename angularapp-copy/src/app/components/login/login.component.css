@@ -1,0 +1,26 @@
+.login-container{
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    justify-content: center;
+}
+.form-group{
+    margin-bottom: 15px;
+}
+.error-message{
+    color: red;
+    font-size: 0.8em;
+}
+input{
+    width: 95%;
+    padding: 10px;
+    background-color: #ccc;
+    color: black;
+    border: none;
+    border-radius: 4px;
+}
+button:disabled{
+    background-color: #cccccc;
+  }

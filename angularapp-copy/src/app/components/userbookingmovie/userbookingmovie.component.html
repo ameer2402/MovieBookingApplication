@@ -1,0 +1,76 @@
+<div class="booking-container" *ngIf="movie">
+    <div class="movie-details">
+      <div class="movie-poster">
+        <img 
+          [src]="'https://source.unsplash.com/random/400x600?movie,cinema,' + movie.title" 
+          [alt]="movie.title"
+          onerror="this.src='https://via.placeholder.com/400x600?text=Movie+Poster'"
+        >
+      </div>
+      
+      <div class="movie-info">
+        <h1>{{ movie.title }}</h1>
+        
+        <div class="movie-meta">
+          <span>
+            <strong>Genre:</strong> {{ movie.genre }}
+          </span>
+          <span>
+            <strong>Duration:</strong> {{ movie.duration }} mins
+          </span>
+        </div>
+        
+        <div class="ticket-pricing">
+          <h3>Ticket Price: ₹{{ movie.price }}</h3>
+        </div>
+      </div>
+    </div>
+    
+    <div class="seat-selection">
+      <h2>Select Your Seats</h2>
+      
+      <div class="seat-controls">
+        <button (click)="decrementSeats()" [disabled]="selectedSeats <= 1">-</button>
+        <span>{{ selectedSeats }} Seats</span>
+        <button (click)="incrementSeats()" [disabled]="selectedSeats >= maxSeats">+</button>
+      </div>
+      
+      <div class="seat-grid">
+        <div class="screen">SCREEN</div>
+        
+        <div class="seats">
+          <div 
+            *ngFor="let row of seatGrid; let rowIndex = index" 
+            class="seat-row"
+          >
+            <div 
+              *ngFor="let seat of row; let colIndex = index"
+              class="seat"
+              [class.selected]="seat"
+              (click)="toggleSeat(rowIndex, colIndex)"
+            >
+              {{ String.fromCharCode(65 + rowIndex) }}{{ colIndex + 1 }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="booking-summary">
+        <h3>Booking Summary</h3>
+        <p>Seats Selected: {{ countSelectedSeats() }}</p>
+        <p>Total Cost: ₹{{ totalCost }}</p>
+      </div>
+      
+      <button 
+        class="book-button" 
+        (click)="createBooking()"
+        [disabled]="countSelectedSeats() !== selectedSeats"
+      >
+        Confirm Booking
+      </button>
+    </div>
+  </div>
+  
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>

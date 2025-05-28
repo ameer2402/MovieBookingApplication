@@ -1,0 +1,41 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <h1 class="site-title">Book MyShow</h1>
+        <ul class="nav-links">
+            <ng-container *ngIf="!isLoggedIn">
+                <li><a routerLink="/register">Register</a></li>
+                <li><a routerLink="/login">Login</a></li>
+            </ng-container>
+            <ng-container *ngIf="isLoggedIn">
+                <li>
+                    <span class="user-info">
+                        ({{username}})-({{userRole}})
+                    </span>
+                </li>
+                <li ><a routerLink="/">Home</a></li>
+                <ng-container *ngIf="userRole === 'ADMIN'">
+                    <app-admin-nav></app-admin-nav>
+                </ng-container>
+                <ng-container *ngIf="userRole === 'USER'">
+                    <app-user-nav></app-user-nav>
+                </ng-container>
+                <li>
+                    <button (click)="showLogoutPopup = true" class="logout-btn">
+                    Logout
+                    </button>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+
+    <div *ngIf="showLogoutPopup" class="logout-popup">
+        <div class="popup-contenr">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout.</p>
+            <div class="popup-actions">
+                <button (click)="logout()" class="confirm-btn">Yes, Logout</button>
+                <button (click)="showLogoutPopup = false" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</nav>
