@@ -5,6 +5,13 @@ import { Booking } from 'src/app/models/booking.model';
 import { Movie } from 'src/app/models/movie.model';
 import { BookingService } from 'src/app/services/booking.service';
 import { MovieService } from 'src/app/services/movie.service';
+import { ScreenService } from 'src/app/services/screen.service';
+import { ToastService } from 'src/app/services/toast.service';
+
+export interface Seat {
+  id: string;
+  isOccupied: boolean;
+}
 
 @Component({
   selector: 'app-userbookingmovie',
@@ -14,38 +21,54 @@ import { MovieService } from 'src/app/services/movie.service';
 export class UserbookingmovieComponent implements OnInit {
   movieId: number;
   movie: Movie;
-  selectedSeats: number = 1;
-  maxSeats: number = 10;
   userId: number;
+  
   totalCost: number = 0;
+  ticketTotal: number = 0;
+  bookingFee: number = 4.50; // Static booking fee per transaction
+  
   errorMessage: string = '';
   
+  selectedSeatsSet: Set<string> = new Set<string>();
 
-  seatGrid: boolean[][] = [];
+  standardSeats: Seat[] = [];
+  vipSeats: Seat[] = [];
+  platinumSeats: Seat[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private movieService: MovieService,
     private bookingService: BookingService,
-    private userStorageService: UserStoreService
+    private userStorageService: UserStoreService,
+    private screenService: ScreenService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
-    this.movieId=+this.route.snapshot.paramMap.get('movieId');
-    this.userId=this.userStorageService.authUser?.userId;
-      if (this.movieId) {
-        this.loadMovieDetails();
-        this.initializeSeatGrid();
-      }
+    this.movieId = +this.route.snapshot.paramMap.get('movieId');
+    this.userId = this.userStorageService.authUser?.userId;
     
+    if (this.movieId) {
+      this.loadMovieDetails();
+    }
   }
 
   loadMovieDetails(): void {
     this.movieService.getMovieById(this.movieId).subscribe(
       (data) => {
         this.movie = data;
-        this.calculateTotalCost();
+        
+        // Parse dynamic pricing and blocked seats from DB model if available
+        if (this.movie.categoryPrices) {
+            this.movieExtras = { categoryPrices: typeof this.movie.categoryPrices === 'string' ? JSON.parse(this.movie.categoryPrices) : this.movie.categoryPrices };
+        }
+        if (this.movie.blockedSeats) {
+            this.movieExtras = this.movieExtras || {};
+            this.movieExtras.blockedSeats = typeof this.movie.blockedSeats === 'string' ? JSON.parse(this.movie.blockedSeats) : this.movie.blockedSeats;
+        }
+        
+        this.loadScreenAndInitialize();
       },
       (error) => {
         this.errorMessage = 'Error loading movie details';
@@ -54,74 +77,168 @@ export class UserbookingmovieComponent implements OnInit {
     );
   }
 
-  initializeSeatGrid(): void {
-    this.seatGrid = Array.from({ length: 10 }, () => 
-      Array.from({ length: 10 }, () => false)
-    );
-  }
-
-  incrementSeats(): void {
-    if (this.selectedSeats < this.maxSeats) {
-      this.selectedSeats++;
-      this.calculateTotalCost();
+  loadScreenAndInitialize(): void {
+    if (this.movie.selectedScreenId) {
+       this.screenService.getScreenById(this.movie.selectedScreenId).subscribe({
+          next: (screen) => {
+             this.initializeSeats(screen);
+             this.calculateTotalCost();
+          },
+          error: () => {
+             this.initializeSeats(null);
+             this.calculateTotalCost();
+          }
+       });
+    } else {
+       this.initializeSeats(null);
+       this.calculateTotalCost();
     }
   }
 
-  decrementSeats(): void {
-    if (this.selectedSeats > 1) {
-      this.selectedSeats--;
-      this.calculateTotalCost();
+  // To hold dynamic prices and blocked seats
+  movieExtras: any = null;
+
+  initializeSeats(screenConfig: any): void {
+    let blockedCoords: string[] = [];
+    
+    if (this.movieExtras && this.movieExtras.blockedSeats) {
+       blockedCoords = this.movieExtras.blockedSeats;
     }
+    
+    // Fallback if no specific screen is linked
+    if (!screenConfig) {
+       screenConfig = {
+           rows: 10,
+           cols: 12,
+           grid: null
+       };
+    }
+    
+    if (screenConfig && typeof screenConfig.grid === 'string') {
+        try { screenConfig.grid = JSON.parse(screenConfig.grid); } catch(e){}
+    }
+    
+    // Random mock occupied seats for realism, appended to blocked seats
+    const occupiedSet = new Set(['0,3', '1,4', '2,8', '4,1', '4,2']); 
+    blockedCoords.forEach(c => occupiedSet.add(c));
+
+    this.standardSeats = [];
+    this.vipSeats = [];
+    this.platinumSeats = [];
+
+    if (screenConfig && screenConfig.grid) {
+      const grid: string[][] = screenConfig.grid;
+      const rows = grid.length;
+      const cols = grid.length > 0 ? grid[0].length : 0;
+      
+      for (let r = 0; r < rows; r++) {
+        let rowLetter = String.fromCharCode(65 + r); // A, B, C...
+        for (let c = 0; c < cols; c++) {
+          let id = `${rowLetter}${c + 1}`;
+          let coordId = `${r},${c}`;
+          let cellValue = grid[r] && grid[r][c] ? grid[r][c] : 'standard';
+          let type = typeof cellValue === 'string' ? cellValue : (cellValue as any).type || 'standard';
+          
+          // Seat is occupied if it's in our mocked set or blocked by theatre owner
+          let seat: Seat = { id: id, isOccupied: occupiedSet.has(coordId) || occupiedSet.has(id) };
+          
+          if (type === 'standard') {
+            this.standardSeats.push(seat);
+          } else if (type === 'vip') {
+            this.vipSeats.push(seat);
+          } else if (type === 'platinum') {
+            this.platinumSeats.push(seat);
+          }
+        }
+      }
+    } else {
+      // Hard fallback if completely empty
+      this.standardSeats = this.generateSeatGrid(4, 10, 65, occupiedSet);
+      this.vipSeats = this.generateSeatGrid(4, 12, 69, occupiedSet);
+      this.platinumSeats = this.generateSeatGrid(2, 8, 73, occupiedSet);
+    }
+  }
+
+  private generateSeatGrid(rows: number, cols: number, startCharCode: number, occupiedSet: Set<string>): Seat[] {
+    const seats: Seat[] = [];
+    for (let r = 0; r < rows; r++) {
+      let rowLetter = String.fromCharCode(startCharCode + r);
+      for (let c = 1; c <= cols; c++) {
+        let id = `${rowLetter}${c}`;
+        seats.push({
+          id: id,
+          isOccupied: occupiedSet.has(id)
+        });
+      }
+    }
+    return seats;
+  }
+
+  toggleSeat(seat: Seat, categoryPriceMultiplier: number = 1): void {
+    if (seat.isOccupied) return;
+
+    if (this.selectedSeatsSet.has(seat.id)) {
+      this.selectedSeatsSet.delete(seat.id);
+    } else {
+      this.selectedSeatsSet.add(seat.id);
+    }
+    this.calculateTotalCost();
   }
 
   calculateTotalCost(): void {
     if (this.movie) {
-      this.totalCost = this.selectedSeats * this.movie.price;
+      // Check which category each selected seat is in to apply dynamic pricing
+      let total = 0;
+      
+      let prices = { standard: this.movie.price, vip: this.movie.price + 100, platinum: this.movie.price + 250 };
+      if (this.movieExtras && this.movieExtras.categoryPrices) {
+         prices = this.movieExtras.categoryPrices;
+      }
+      
+      this.selectedSeatsSet.forEach(seatId => {
+        if (this.standardSeats.find(s => s.id === seatId)) {
+          total += prices.standard;
+        } else if (this.vipSeats.find(s => s.id === seatId)) {
+          total += prices.vip;
+        } else if (this.platinumSeats.find(s => s.id === seatId)) {
+          total += prices.platinum;
+        } else {
+          total += prices.standard;
+        }
+      });
+      
+      this.ticketTotal = total;
+      this.totalCost = this.ticketTotal > 0 ? this.ticketTotal + this.bookingFee : 0;
     }
   }
 
-  toggleSeat(row: number, col: number): void {
-    const currentSelectedSeats = this.countSelectedSeats();
-    
-    if (!this.seatGrid[row][col] && currentSelectedSeats < this.selectedSeats) {
-      this.seatGrid[row][col] = true;
-    } else if (this.seatGrid[row][col]) {
-      this.seatGrid[row][col] = false;
-    }
-  }
-
-  countSelectedSeats(): number {
-    return this.seatGrid.reduce((total, row) => 
-      total + row.filter(seat => seat).length, 0);
+  get selectedSeatsArray(): string[] {
+    return Array.from(this.selectedSeatsSet);
   }
 
   createBooking(): void {
-    const selectedSeatCount = this.countSelectedSeats();
-    
-    if (selectedSeatCount !== this.selectedSeats) {
-      alert(`Please select exactly ${this.selectedSeats} seats`);
+    if (this.selectedSeatsSet.size === 0) {
+      this.errorMessage = 'Please select at least one seat.';
       return;
     }
 
     const booking: Booking = {
       userId: this.userId,
       movieId: this.movieId,
-      seatCount: this.selectedSeats,
+      seatCount: this.selectedSeatsSet.size,
+      selectedSeats: Array.from(this.selectedSeatsSet).join(', '),
       totalCost: this.totalCost
     };
 
-    // Call booking service to add booking
-    this.bookingService.addBooking(this.movieId,this.userId,booking).subscribe(
+    this.bookingService.addBooking(this.movieId, this.userId, booking).subscribe(
       () => {
-        alert('Booking Added Successfully!');
-        this.router.navigate(['user/view/Movies']);
+        this.toastService.showSuccess('Booking Confirmed', 'Your movie tickets have been booked successfully!');
+        this.router.navigate(['/user/view/Mybookings']);
       },
       (error) => {
-        this.errorMessage = 'Error creating booking';
+        this.toastService.showError('Booking Failed', 'There was an error processing your booking.');
         console.error('Booking error', error);
-        alert('Failed to create booking');
       }
     );
   }
-
 }

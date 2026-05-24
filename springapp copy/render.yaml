@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: cineprestige-backend
+    env: docker
+    plan: free
+    dockerCommand: "mvn clean spring-boot:run"
+    envVars:
+      - key: PORT
+        value: 8080

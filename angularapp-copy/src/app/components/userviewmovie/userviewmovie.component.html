@@ -9,9 +9,10 @@
       <div *ngFor="let movie of movies" class="movie-card">
         <div class="movie-image">
           <img 
-            [src]="'https://picsum.photos/200/300' + movie.title" 
+            [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://image.pollinations.ai/prompt/movie%20poster%20for%20' + movie.title + '?width=400&height=600&nologo=true')" 
             alt="{{ movie.title }}"
             onerror="this.src='https://via.placeholder.com/400x600?text=Movie+Poster'"
+            class="object-cover w-full h-full"
           >
         </div>
         

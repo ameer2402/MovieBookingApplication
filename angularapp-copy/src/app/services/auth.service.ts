@@ -5,12 +5,13 @@ import { User } from '../models/user.model';
 import { tap } from 'rxjs/operators';
 import { Login } from '../models/login.model';
 import { UserStoreService } from '../helpers/user-store.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "http://localhost:8080/api/user";
+  private baseUrl = environment.apiUrl + "/user";
 
   constructor(private http:HttpClient,private userStore:UserStoreService) {
    }

@@ -1,4 +1,45 @@
+@keyframes growBar {
+  0% { transform: scaleY(0); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
 
+.animate-bar {
+  transform-origin: bottom;
+  animation: growBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: scaleY(0);
+}
+
+@keyframes growProgress {
+  0% { transform: scaleX(0); opacity: 0; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+.progress-fill {
+  transform-origin: left;
+  animation: growProgress 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: scaleX(0);
+}
+
+.kpi-card {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.kpi-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(229, 9, 20, 0.3);
+  border-color: rgba(229, 9, 20, 0.5);
+  background: linear-gradient(145deg, rgba(229, 9, 20, 0.1) 0%, rgba(20, 20, 20, 0.9) 100%);
+}
+
+.kpi-icon-container {
+  transition: all 0.5s ease;
+}
+
+.kpi-card:hover .kpi-icon-container {
+  transform: scale(1.2) rotate(10deg);
+  opacity: 0.8;
+}
 .admin-bookings-container {
     max-width: 1200px;
     margin: 0 auto;

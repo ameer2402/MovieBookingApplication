@@ -1,0 +1,46 @@
+<div class="fixed top-20 right-4 z-[100] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+  <div *ngFor="let toast of toasts$ | async" 
+       class="pointer-events-auto toast-enter overflow-hidden glass-panel border rounded-xl shadow-2xl relative"
+       [ngClass]="{
+         'border-green-500/30 bg-green-900/10': toast.type === 'success',
+         'border-error/30 bg-error/10': toast.type === 'error',
+         'border-blue-500/30 bg-blue-900/10': toast.type === 'info',
+         'border-yellow-500/30 bg-yellow-900/10': toast.type === 'warning'
+       }">
+    
+    <!-- Left accent border -->
+    <div class="absolute left-0 top-0 bottom-0 w-1"
+         [ngClass]="{
+           'bg-green-500': toast.type === 'success',
+           'bg-error': toast.type === 'error',
+           'bg-blue-500': toast.type === 'info',
+           'bg-yellow-500': toast.type === 'warning'
+         }"></div>
+
+    <div class="p-4 flex gap-3 items-start">
+      <!-- Icon -->
+      <span class="material-symbols-outlined shrink-0 mt-0.5"
+            [ngClass]="{
+              'text-green-500': toast.type === 'success',
+              'text-error': toast.type === 'error',
+              'text-blue-500': toast.type === 'info',
+              'text-yellow-500': toast.type === 'warning'
+            }">
+        {{ toast.type === 'success' ? 'check_circle' : 
+           toast.type === 'error' ? 'error' : 
+           toast.type === 'info' ? 'info' : 'warning' }}
+      </span>
+
+      <!-- Content -->
+      <div class="flex-grow">
+        <h4 class="text-sm font-bold text-white mb-0.5">{{ toast.title }}</h4>
+        <p class="text-xs text-on-surface-variant leading-relaxed">{{ toast.message }}</p>
+      </div>
+
+      <!-- Close Button -->
+      <button (click)="remove(toast.id)" class="shrink-0 w-6 h-6 rounded-md flex items-center justify-center hover:bg-white/10 text-on-surface-variant hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-[16px]">close</span>
+      </button>
+    </div>
+  </div>
+</div>

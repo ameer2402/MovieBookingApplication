@@ -1,0 +1,65 @@
+<!-- Cinematic Background -->
+<div class="fixed inset-0 z-0">
+  <div class="w-full h-full bg-[#0F0F0F]"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-primary-container/5 to-transparent h-1/2"></div>
+</div>
+
+<!-- Layout Container -->
+<main class="relative z-10 min-h-screen pt-32 pb-margin-desktop px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto">
+  
+  <div class="space-y-unit mb-stack-lg border-b border-white/10 pb-4">
+    <h1 class="font-display-lg text-display-lg-mobile md:text-[40px] tracking-tighter text-on-surface flex items-center gap-3">
+      <span class="material-symbols-outlined text-[40px] text-primary-container">manage_accounts</span>
+      Account Settings
+    </h1>
+    <p class="font-body-md text-body-md text-on-surface-variant opacity-80">
+      Manage your personal information, preferences, and security settings.
+    </p>
+  </div>
+
+
+
+  <div class="glass-panel p-stack-md md:p-stack-lg rounded-xl shadow-2xl animate-in fade-in slide-in-from-bottom-8 duration-700">
+    <div class="flex items-center gap-6 mb-8">
+      <div class="w-24 h-24 rounded-full bg-surface-container-highest border-2 border-primary-container flex items-center justify-center text-on-surface font-display-lg text-4xl shadow-[0_0_20px_rgba(229,9,20,0.3)]">
+        {{ userName ? userName.charAt(0).toUpperCase() : 'U' }}
+      </div>
+      <div>
+        <h2 class="font-headline-md text-headline-md text-on-surface">{{ userName }}</h2>
+        <p class="text-on-surface-variant capitalize">{{ role ? role.toLowerCase() : 'Standard' }} Account</p>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="font-label-md text-on-surface-variant uppercase tracking-wider block mb-2">Display Name</label>
+          <input type="text" [(ngModel)]="userName" class="w-full bg-[#1A1A1A] border border-white/10 rounded-lg text-on-surface px-4 py-3 focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all outline-none">
+        </div>
+        <div>
+          <label class="font-label-md text-on-surface-variant uppercase tracking-wider block mb-2">Email Address</label>
+          <input type="email" [value]="email" class="w-full bg-[#1A1A1A] border border-white/10 rounded-lg text-on-surface/50 px-4 py-3 cursor-not-allowed" disabled>
+          <p class="text-xs text-on-surface-variant mt-1">Email cannot be changed.</p>
+        </div>
+      </div>
+
+      <div class="pt-6 border-t border-white/10">
+        <h3 class="font-headline-sm text-on-surface mb-4">Preferences</h3>
+        <div class="flex items-center justify-between p-4 bg-[#1A1A1A] rounded-lg border border-white/5 cursor-pointer" (click)="marketingEmails = !marketingEmails">
+          <div>
+            <p class="font-medium text-on-surface">Marketing Emails</p>
+            <p class="text-sm text-on-surface-variant">Receive offers and upcoming movie alerts.</p>
+          </div>
+          <button class="w-12 h-6 rounded-full relative transition-colors duration-300" [ngClass]="marketingEmails ? 'bg-primary-container' : 'bg-surface-container-highest'">
+            <div class="w-4 h-4 rounded-full bg-white absolute top-1 transition-all duration-300 shadow-md" [ngClass]="marketingEmails ? 'right-1' : 'left-1'"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 flex justify-end gap-4">
+      <button (click)="goBack()" class="px-6 py-2 rounded-lg font-bold text-primary-container hover:bg-primary-container/10 transition-colors">Cancel</button>
+      <button (click)="saveChanges()" class="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold hover:brightness-110 active:scale-95 transition-all shadow-[0_4px_14px_rgba(229,9,20,0.4)]">Save Changes</button>
+    </div>
+  </div>
+</main>

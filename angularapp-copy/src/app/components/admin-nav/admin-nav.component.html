@@ -1,7 +1,10 @@
-<nav>
-    <ul>
-        <li><a routerLink="/admin/add/newMovies">Add Movies</a></li>
-        <li><a routerLink="/admin/view/Movies">View Movies</a></li>
-        <li><a routerLink="/admin/view/AllBookings">View Bookings</a></li>
-    </ul>
-</nav>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/view/Movies">Manage Movies</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/add/newMovies">Add Movies</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/view/AllBookings">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/theatre-config">Screen Manager</a>
+
+<ng-container *ngIf="isSuperAdmin">
+    <div class="w-px h-6 bg-white/20 hidden md:block"></div>
+    <div class="h-px w-full bg-white/10 block md:hidden my-2"></div>
+    <a class="text-secondary font-medium hover:text-secondary-container transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-secondary/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-secondary !border-secondary !bg-secondary/10 md:!bg-transparent" routerLink="/admin/add/owner">Add Theatre Owner</a>
+</ng-container>

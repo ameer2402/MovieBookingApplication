@@ -1,24 +1,115 @@
-<div class="bookings-container">
-    <h2>My Bookings</h2>
-  
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-  
-    <div *ngIf="bookings.length === 0 && !errorMessage" class="no-bookings">
-      You have no current bookings.
-    </div>
-  
-    <div *ngIf="bookings.length > 0" class="bookings-list">
-      <div *ngFor="let booking of bookings" class="booking-card">
-        <div class="booking-details">
-          <h3>Booking ID: {{ booking.id || 'N/A' }}</h3>
-          <p>User ID: {{ booking.user.userId || 'N/A' }}</p>
-          <p>Movie Title: {{ booking.movie.title || 'N/A' }}</p>
-          <p>Seat Count: {{ booking.seatCount || 'N/A' }}</p>
-          <p>Total Cost: ₹{{ booking.totalCost ? (booking.totalCost | number:'1.2-2') : 'N/A' }}</p>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-stack-lg px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto w-full min-h-screen">
+
+<!-- Header Section -->
+<header class="mb-stack-lg">
+    <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">My Bookings</h1>
+    <p class="text-on-surface-variant font-body-lg text-body-lg">Manage your cinematic journeys and premiere experiences.</p>
+</header>
+
+<!-- Tabs -->
+<div class="flex gap-stack-md mb-stack-md border-b border-white/10 pb-2">
+    <button class="text-primary-container font-bold border-b-2 border-primary-container pb-2 font-headline-sm text-headline-sm">Upcoming</button>
+</div>
+
+<!-- Bookings Grid -->
+<div *ngIf="bookings.length > 0" class="grid grid-cols-1 gap-stack-md">
+    
+    <!-- Booking Card -->
+    <div *ngFor="let booking of bookings" class="glass-panel rounded-xl overflow-hidden flex flex-col md:flex-row group transition-all duration-300 hover:shadow-[0_0_30px_rgba(229,9,20,0.15)]">
+        
+        <div class="relative w-full md:w-48 h-72 md:h-auto overflow-hidden bg-surface-container-highest">
+            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                 [src]="$any(booking.movie).posterBase64 ? $any(booking.movie).posterBase64 : ('https://image.pollinations.ai/prompt/movie%20poster%20for%20' + booking.movie.title + '?width=400&height=600&nologo=true')"
+                 [alt]="booking.movie.title"
+                 onerror="this.src='https://via.placeholder.com/400x600?text=Movie'">
+            <div class="absolute top-4 left-4 bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-label-md text-label-md">CONFIRMED</div>
         </div>
-      </div>
+        
+        <div class="flex-grow p-stack-md flex flex-col justify-between">
+            <div>
+                <div class="flex justify-between items-start mb-2">
+                    <h2 class="font-headline-md text-headline-md text-on-surface">{{ booking.movie.title }}</h2>
+                    <span class="text-primary font-bold font-label-lg text-label-lg">₹{{ booking.totalCost }}</span>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-stack-sm mt-stack-sm">
+                    <div class="flex items-center gap-2 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-primary text-sm">confirmation_number</span>
+                        <span class="font-label-md text-label-md">Seats: {{ booking.selectedSeats || booking.seatCount }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-primary text-sm">schedule</span>
+                        <span class="font-label-md text-label-md">{{ booking.movie.duration }} mins</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-primary text-sm">location_on</span>
+                        <span class="font-label-md text-label-md truncate max-w-[120px]">{{ $any(booking).theatreName || 'CINEPRESTIGE' }}, {{ $any(booking).city || 'India' }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-primary text-sm">movie</span>
+                        <span class="font-label-md text-label-md">{{ booking.movie.genre }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-stack-md flex flex-wrap gap-4 items-center">
+                <!-- If Movie is in the Future -->
+                <ng-container *ngIf="!isMovieInPast(booking)">
+                    <button (click)="openQRModal(booking)" class="bg-primary-container text-on-primary-container px-6 py-3 rounded-lg font-label-lg text-label-lg flex items-center gap-2 hover:opacity-90 transition-all active:scale-95">
+                        <span class="material-symbols-outlined">qr_code_2</span>
+                        View QR Ticket
+                    </button>
+                    <button (click)="downloadPDF(booking)" class="border border-white/20 text-on-surface px-6 py-3 rounded-lg font-label-lg text-label-lg flex items-center gap-2 hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined">download</span>
+                        Download PDF
+                    </button>
+                </ng-container>
+
+                <!-- If Movie is in the Past -->
+                <ng-container *ngIf="isMovieInPast(booking)">
+                    <div *ngIf="hasRated(booking)" class="text-secondary font-label-lg flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1">check_circle</span>
+                        Feedback Submitted
+                    </div>
+                    <div *ngIf="!hasRated(booking)" class="flex flex-col gap-2">
+                        <span class="font-label-md text-on-surface-variant">Rate your experience:</span>
+                        <div class="flex gap-1 group/rating">
+                            <button *ngFor="let star of [1,2,3,4,5]" 
+                                    (click)="rateMovie(booking, star)"
+                                    class="text-on-surface-variant hover:text-secondary transition-colors group-hover/rating:hover:text-secondary"
+                                    title="Rate {{star}} stars">
+                                <span class="material-symbols-outlined hover:scale-110" style="font-variation-settings: 'FILL' 1">star</span>
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
     </div>
-  </div>
-  
+</div>
+
+<!-- Empty State -->
+<div *ngIf="bookings.length === 0" class="text-center py-stack-lg">
+    <span class="material-symbols-outlined text-6xl text-on-surface-variant opacity-50 mb-4">movie_filter</span>
+    <h3 class="font-headline-md text-on-surface">No Bookings Yet</h3>
+    <p class="text-on-surface-variant mb-4">You haven't booked any cinematic experiences yet.</p>
+    <button routerLink="/" class="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold">Browse Movies</button>
+</div>
+
+<!-- QR Modal -->
+<div *ngIf="showQRModal && selectedBookingForQR" class="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-8 backdrop-blur-md">
+    <div class="glass-panel p-8 rounded-2xl max-w-sm w-full text-center relative shadow-[0_0_50px_rgba(229,9,20,0.2)] animate-in zoom-in-95 duration-300">
+        <button (click)="closeQRModal()" class="absolute top-4 right-4 material-symbols-outlined text-on-surface hover:text-primary transition-colors">close</button>
+        <h2 class="font-headline-md text-headline-md mb-6">Your Entry Ticket</h2>
+        <div class="bg-white p-4 rounded-xl inline-block mb-6 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            <!-- Simulated QR Code Image -->
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CINEPRESTIGE-TICKET-{{selectedBookingForQR.id}}" alt="QR Code" class="w-48 h-48 object-contain">
+        </div>
+        <p class="font-label-lg text-label-lg text-on-surface-variant mb-2">Scan at Hall Entrance</p>
+        <div class="font-headline-sm text-headline-sm text-primary">{{ selectedBookingForQR.movie.title }}</div>
+        <div class="font-label-md text-on-surface-variant mt-1">{{ selectedBookingForQR.seatCount }} Seats</div>
+    </div>
+</div>
+
+</main>

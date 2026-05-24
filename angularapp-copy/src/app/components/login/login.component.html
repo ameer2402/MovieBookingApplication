@@ -1,40 +1,152 @@
-<div class="login-container">
-    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
-        <h2>Login</h2>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" ngModel required email #email="ngModel">
-            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
-                <div *ngIf="email.hasError('required')">
-                    Email is Required.
-                </div>
-                <div *ngIf="email.hasError('email')">
-                    Enter a Valid Email Address.
-                </div>
-            </div>
+<!-- Cinematic Background -->
+<div class="fixed inset-0 z-0">
+  <img *ngIf="!isAdminView" class="w-full h-full object-cover opacity-40 scale-110 blur-sm" data-alt="A moody, high-contrast cinematic still of a grand, empty luxury cinema hall..." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFA4Q90-c1LwcmIgmeduNMX-nYWJDos1lOOY1hSPYYOgv91VUXWBGlYPMvt6RIXu5RlUn-a-OYMgfMJZJQ9CMT1rq_TtEKKvwQcX1gek3Ip-Y0dfrg-i6HhAJXaCbEfSHDM_x1aaTMyg2hlkodQniaqSYQjiAuFvGjeOS6d3olhYP7NKCHU6jKhlq3qV3Agh499ccH4rsfm6LXDzGFZB0Yw1Jy6kaS7NELsguKALmNi6gYp6Md6TRqiUFNZYPf_xOovCBmqhNhKl0z"/>
+  <img *ngIf="isAdminView" class="w-full h-full object-cover opacity-40 mix-blend-luminosity" data-alt="A sophisticated abstract architectural photograph featuring sharp geometric angles..." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChP6otAlDXRpva4DUFiFs5c7DLgR75tOtA67T4qDpvE_QoZW66oho3nNyDX0BHEGwa9_6f7t18tiN-XDYrZQ2n1D6prqPfjaDDKGmIOAbSvsbfTOGnxDMLziiFYUFwfy4l4NDkUyu_Ha1WUXgordGvicR1GbCa2VYE2tI8A_cObzSTl6_PO1sR9bxLVuVqrM0ixS-Kq5zi-BYztxdzgnxaDyVyQmtC9OkaATOnHohqCLiIqrsaOZErqmMcK-lrJ-F_z1C44Hx6Hhm8"/>
+  <div class="absolute inset-0 bg-black/60"></div>
+</div>
+
+<!-- Layout Container -->
+<main class="relative z-10 min-h-screen flex flex-col">
+  <!-- Top Navigation (Shell suppressed for transactional page, but brand identity kept) -->
+  <header class="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop" [ngClass]="isAdminView ? 'bg-[#1a1a1acc] backdrop-blur-xl border-b border-white/10 shadow-2xl z-50' : 'justify-center'">
+    <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg tracking-tighter text-primary-container" [routerLink]="'/'" style="cursor: pointer;">
+        CINEPRESTIGE
+    </h1>
+    <div *ngIf="isAdminView" class="flex items-center gap-stack-md hidden md:flex">
+      <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Secure Access Point</span>
+      <span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">encrypted</span>
+    </div>
+  </header>
+
+  <!-- Login Card Section -->
+  <section class="flex-grow flex items-center justify-center px-margin-mobile">
+    <!-- User Login Card -->
+    <div *ngIf="!isAdminView" class="glass-panel w-full max-w-[440px] p-stack-lg rounded-xl shadow-2xl flex flex-col gap-stack-md animate-in fade-in zoom-in duration-700">
+      <div class="space-y-unit">
+        <h2 class="font-headline-md text-headline-md text-on-surface">Welcome Back</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant opacity-80">Please enter your details to access the premiere experience.</p>
+      </div>
+
+      <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="flex flex-col gap-stack-md">
+        <!-- Email Field -->
+        <div class="relative group">
+          <label class="font-label-md text-label-md text-on-surface-variant mb-1 block uppercase tracking-wider" for="email">Email Address</label>
+          <div class="relative">
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="email" name="email" ngModel required email #email="ngModel" placeholder="name@cinema.com" type="email"/>
+            <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
+            <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
+          </div>
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-error mt-1 text-sm">
+            <div *ngIf="email.hasError('required')">Email is Required.</div>
+            <div *ngIf="email.hasError('email')">Enter a Valid Email Address.</div>
+          </div>
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" ngModel required  #password="ngModel">
-            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error-message">
-                <div *ngIf="password.hasError('required')">
-                    Password is Required.
-                </div>
-            </div>
+
+        <!-- Password Field -->
+        <div class="relative group">
+          <div class="flex justify-between items-end mb-1">
+            <label class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider" for="password">Password</label>
+          </div>
+          <div class="relative">
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="password" name="password" ngModel required #password="ngModel" placeholder="••••••••" type="password"/>
+            <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
+            <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
+          </div>
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-error mt-1 text-sm">
+            <div *ngIf="password.hasError('required')">Password is Required.</div>
+          </div>
         </div>
-        <div *ngIf="errorMessage" class="error-message">
+        
+        <div *ngIf="errorMessage" class="text-error text-center font-bold">
             {{errorMessage}}
         </div>
-        <button 
-        type="submit"
-        [disabled]="loginForm.invalid"
-        >
-        Login
-        </button>
-        <p>
-            Dont have an Account?
-            <a routerLink="/register">Register here</a>
-        </p>
 
-    </form>
-</div>
+        <!-- Sign In Button -->
+        <button [disabled]="loginForm.invalid" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+          Sign In
+          <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+        </button>
+      </form>
+
+      <!-- Secondary Actions -->
+      <div class="flex flex-col gap-stack-sm">
+        <p class="text-center font-body-md text-body-md text-on-surface-variant mt-stack-sm">
+          Don't have an account? 
+          <a class="text-primary-container font-bold hover:underline" routerLink="/register">Sign Up</a>
+        </p>
+        <p class="text-center font-body-md text-body-md text-on-surface-variant mt-2 text-sm">
+          Authorized Personnel?
+          <button (click)="toggleAdminView()" class="text-primary font-bold hover:underline">Go to Admin Portal</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Admin Login Card -->
+    <div *ngIf="isAdminView" class="w-full max-w-md">
+      <div class="glass-panel p-stack-lg rounded-xl shadow-[0_0_50px_-10px_rgba(229,9,20,0.3)] animate-in fade-in zoom-in duration-700">
+        <div class="text-center mb-stack-lg">
+          <h1 class="font-headline-md text-headline-md text-on-surface mb-2">Admin Portal</h1>
+          <p class="font-body-md text-on-surface-variant">Authorized Personnel Only</p>
+        </div>
+
+        <form #adminForm="ngForm" (ngSubmit)="login(adminForm)" class="space-y-stack-md">
+          <!-- Admin ID Input -->
+          <div class="space-y-1">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider ml-1" for="admin-id">Admin ID</label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-outline" style="font-size: 20px;">badge</span>
+              </div>
+              <input class="block w-full pl-10 bg-[#1A1A1A] border-0 border-b-2 border-surface-variant text-on-surface focus:ring-0 focus:border-primary-container transition-all duration-300 rounded-t-lg" id="admin-id" name="email" ngModel required email placeholder="Enter Identity Code" type="text"/>
+            </div>
+          </div>
+
+          <!-- Secure Token Input -->
+          <div class="space-y-1">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider ml-1" for="secure-token">Secure Token</label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-outline" style="font-size: 20px;">key</span>
+              </div>
+              <input class="block w-full pl-10 bg-[#1A1A1A] border-0 border-b-2 border-surface-variant text-on-surface focus:ring-0 focus:border-primary-container transition-all duration-300 rounded-t-lg" id="secure-token" name="password" ngModel required placeholder="••••••••••••" type="password"/>
+            </div>
+          </div>
+          
+          <div *ngIf="errorMessage" class="text-error text-center font-bold mt-2">
+            {{errorMessage}}
+          </div>
+
+          <!-- Access Button -->
+          <button [disabled]="adminForm.invalid" class="w-full mt-stack-md bg-primary-container text-on-primary-container font-headline-sm text-headline-sm py-4 rounded-lg shadow-lg hover:brightness-110 active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+            <span>Access Portal</span>
+            <span class="material-symbols-outlined">login</span>
+          </button>
+        </form>
+
+        <div class="mt-stack-md text-center flex flex-col gap-2">
+          <button (click)="toggleAdminView()" class="font-label-md text-label-md text-primary-container hover:underline transition-all">
+            Return to User Login
+          </button>
+        </div>
+      </div>
+      <!-- Visual Security Elements -->
+      <div class="mt-stack-md flex justify-between px-2 animate-in fade-in duration-700 delay-300">
+        <div class="flex items-center gap-2 text-on-surface-variant opacity-60">
+          <span class="material-symbols-outlined" style="font-size: 16px;">verified_user</span>
+          <span class="font-label-md text-label-md">256-bit SSL</span>
+        </div>
+        <div class="flex items-center gap-2 text-on-surface-variant opacity-60">
+          <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>
+          <span class="font-label-md text-label-md" id="ip-address">System: PRESTIGE-SEC-01</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Minimal Footer -->
+  <footer class="h-20 flex items-center justify-center px-margin-mobile md:px-margin-desktop" [ngClass]="isAdminView ? 'bg-surface-container-lowest' : ''">
+    <p class="font-label-md text-label-md text-on-surface-variant opacity-60">
+      © 2024 CINEPRESTIGE PREMIERE. ALL RIGHTS RESERVED.
+    </p>
+  </footer>
+</main>

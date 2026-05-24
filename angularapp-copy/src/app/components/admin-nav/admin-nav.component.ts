@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserStoreService } from 'src/app/helpers/user-store.service';
 
 @Component({
   selector: 'app-admin-nav',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminNavComponent implements OnInit {
 
-  constructor() { }
+  isSuperAdmin: boolean = false;
+
+  constructor(private userStore: UserStoreService) { }
 
   ngOnInit(): void {
+    const role = this.userStore.authUser?.role;
+    this.isSuperAdmin = role === 'SUPER_ADMIN';
   }
 
 }

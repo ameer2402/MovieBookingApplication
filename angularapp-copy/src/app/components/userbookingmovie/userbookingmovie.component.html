@@ -1,76 +1,172 @@
-<div class="booking-container" *ngIf="movie">
-    <div class="movie-details">
-      <div class="movie-poster">
-        <img 
-          [src]="'https://source.unsplash.com/random/400x600?movie,cinema,' + movie.title" 
-          [alt]="movie.title"
-          onerror="this.src='https://via.placeholder.com/400x600?text=Movie+Poster'"
-        >
+<div class="booking-container min-h-screen pt-32 pb-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-gutter relative" *ngIf="movie">
+  
+  <!-- Left: Interactive Seat Map -->
+  <section class="lg:col-span-8 flex flex-col items-center w-full">
+    <!-- Cinema Screen Indicator -->
+    <div class="w-full max-w-2xl mb-20 relative">
+      <div class="h-1.5 w-full bg-white/20 rounded-full relative overflow-hidden">
+        <div class="absolute inset-0 bg-primary-container animate-pulse opacity-50"></div>
       </div>
-      
-      <div class="movie-info">
-        <h1>{{ movie.title }}</h1>
-        
-        <div class="movie-meta">
-          <span>
-            <strong>Genre:</strong> {{ movie.genre }}
-          </span>
-          <span>
-            <strong>Duration:</strong> {{ movie.duration }} mins
-          </span>
-        </div>
-        
-        <div class="ticket-pricing">
-          <h3>Ticket Price: ₹{{ movie.price }}</h3>
-        </div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[110%] h-32 screen-glow rounded-[50%] -z-10"></div>
+      <div class="text-center mt-stack-sm font-label-md text-label-md text-on-surface-variant tracking-widest uppercase">Screen This Way</div>
+    </div>
+
+    <!-- Seat Grid Legend -->
+    <div class="flex flex-wrap justify-center gap-6 mb-12">
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-sm border border-outline bg-transparent"></div>
+        <span class="text-label-md font-label-md text-on-surface-variant">Available</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-sm bg-primary-container shadow-[0_0_8px_rgba(229,9,20,0.4)]"></div>
+        <span class="text-label-md font-label-md text-on-surface-variant">Selected</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-sm bg-surface-container-highest opacity-40"></div>
+        <span class="text-label-md font-label-md text-on-surface-variant">Occupied</span>
       </div>
     </div>
-    
-    <div class="seat-selection">
-      <h2>Select Your Seats</h2>
+
+    <!-- The Grid -->
+    <div class="w-full flex flex-col gap-6 overflow-x-auto pb-8 items-center">
       
-      <div class="seat-controls">
-        <button (click)="decrementSeats()" [disabled]="selectedSeats <= 1">-</button>
-        <span>{{ selectedSeats }} Seats</span>
-        <button (click)="incrementSeats()" [disabled]="selectedSeats >= maxSeats">+</button>
+      <!-- Standard Section -->
+      <div class="space-y-3">
+        <div class="text-center text-label-md font-label-md text-outline-variant mb-2">STANDARD</div>
+        <div class="grid grid-cols-10 gap-2 md:gap-3 w-max mx-auto">
+          <button 
+            *ngFor="let seat of standardSeats"
+            (click)="toggleSeat(seat)"
+            [ngClass]="{
+              'bg-surface-container-highest opacity-30 cursor-not-allowed': seat.isOccupied,
+              'border border-outline hover:border-primary-container hover:bg-primary-container/10': !seat.isOccupied,
+              'seat-selected': selectedSeatsSet.has(seat.id)
+            }"
+            [disabled]="seat.isOccupied"
+            class="w-6 h-6 md:w-8 md:h-8 rounded-sm flex items-center justify-center text-[10px] transition-all duration-200 text-transparent hover:text-white/50">
+            {{ seat.id }}
+          </button>
+        </div>
       </div>
+
+      <!-- VIP Section -->
+      <div class="space-y-3 mt-4">
+        <div class="text-center text-label-md font-label-md text-secondary mb-2">VIP EXPERIENCE</div>
+        <div class="grid grid-cols-12 gap-2 md:gap-3 w-max mx-auto">
+          <button 
+            *ngFor="let seat of vipSeats"
+            (click)="toggleSeat(seat)"
+            [ngClass]="{
+              'bg-surface-container-highest opacity-30 cursor-not-allowed': seat.isOccupied,
+              'border border-outline hover:border-primary-container hover:bg-primary-container/10': !seat.isOccupied,
+              'seat-selected': selectedSeatsSet.has(seat.id)
+            }"
+            [disabled]="seat.isOccupied"
+            class="w-6 h-6 md:w-8 md:h-8 rounded-sm flex items-center justify-center text-[10px] transition-all duration-200 text-transparent hover:text-white/50">
+            {{ seat.id }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Platinum Section -->
+      <div class="space-y-3 mt-4">
+        <div class="text-center text-label-md font-label-md text-tertiary mb-2">PLATINUM RECLINERS</div>
+        <div class="grid grid-cols-8 gap-4 md:gap-6 w-max mx-auto">
+          <button 
+            *ngFor="let seat of platinumSeats"
+            (click)="toggleSeat(seat)"
+            [ngClass]="{
+              'bg-surface-container-highest opacity-30 cursor-not-allowed': seat.isOccupied,
+              'border-2 border-tertiary-fixed-dim/30 hover:border-primary-container bg-surface-container/50': !seat.isOccupied,
+              'seat-selected': selectedSeatsSet.has(seat.id)
+            }"
+            [disabled]="seat.isOccupied"
+            class="w-8 h-10 md:w-10 md:h-12 rounded-lg flex items-center justify-center transition-all duration-300">
+            <span class="material-symbols-outlined text-sm" [class.text-white]="selectedSeatsSet.has(seat.id)" [class.text-tertiary-fixed-dim]="!selectedSeatsSet.has(seat.id)">airline_seat_recline_extra</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Right: Order Summary Sidebar -->
+  <aside class="lg:col-span-4 w-full">
+    <div class="glass-panel rounded-xl p-8 sticky top-28 flex flex-col gap-6 w-full max-w-sm mx-auto lg:max-w-none">
       
-      <div class="seat-grid">
-        <div class="screen">SCREEN</div>
-        
-        <div class="seats">
-          <div 
-            *ngFor="let row of seatGrid; let rowIndex = index" 
-            class="seat-row"
-          >
-            <div 
-              *ngFor="let seat of row; let colIndex = index"
-              class="seat"
-              [class.selected]="seat"
-              (click)="toggleSeat(rowIndex, colIndex)"
-            >
-              {{ String.fromCharCode(65 + rowIndex) }}{{ colIndex + 1 }}
-            </div>
+      <!-- Movie Backdrop Mini -->
+      <div class="relative w-full h-40 rounded-lg overflow-hidden mb-2">
+        <img [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://image.pollinations.ai/prompt/movie%20poster%20for%20' + movie.title + '?width=400&height=200&nologo=true')" 
+             [alt]="movie.title" 
+             onerror="this.src='https://via.placeholder.com/400x200?text=Movie'"
+             class="w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+        <div class="absolute bottom-4 left-4">
+          <span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">{{ movie.genre }}</span>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-headline-md text-headline-md text-on-surface">{{ movie.title }}</h2>
+        <div class="flex items-center gap-4 mt-2 text-on-surface-variant font-label-md">
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">schedule</span>
+            <span>{{ movie.duration }} mins</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">confirmation_number</span>
+            <span>₹{{ movie.price }} / standard</span>
           </div>
         </div>
       </div>
-      
-      <div class="booking-summary">
-        <h3>Booking Summary</h3>
-        <p>Seats Selected: {{ countSelectedSeats() }}</p>
-        <p>Total Cost: ₹{{ totalCost }}</p>
+
+      <div class="h-px bg-white/10"></div>
+
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <span class="text-on-surface-variant font-label-lg">Selected Seats</span>
+          <span class="text-primary font-bold">{{ selectedSeatsSet.size }} Seat{{ selectedSeatsSet.size !== 1 ? 's' : '' }}</span>
+        </div>
+        
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let seatId of selectedSeatsArray" class="px-3 py-1 bg-surface-container-high border border-white/10 rounded-full text-label-md font-bold text-primary animate-in fade-in zoom-in duration-300">
+            {{ seatId }}
+          </span>
+          <span *ngIf="selectedSeatsSet.size === 0" class="text-label-md text-on-surface-variant opacity-50 italic">
+            No seats selected
+          </span>
+        </div>
       </div>
-      
+
+      <div class="space-y-2 pt-2">
+        <div class="flex justify-between text-on-surface-variant text-label-md">
+          <span>Ticket Total</span>
+          <span>₹{{ ticketTotal.toFixed(2) }}</span>
+        </div>
+        <div class="flex justify-between text-on-surface-variant text-label-md">
+          <span>Booking Fee</span>
+          <span>₹{{ (selectedSeatsSet.size > 0 ? bookingFee : 0).toFixed(2) }}</span>
+        </div>
+        <div class="flex justify-between items-end pt-4 border-t border-white/10 mt-2">
+          <span class="font-headline-sm text-headline-sm text-on-surface">Total</span>
+          <span class="font-display-lg text-headline-md text-primary-container">₹{{ totalCost.toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="text-error text-center font-bold text-sm bg-error-container/20 p-2 rounded">
+        {{ errorMessage }}
+      </div>
+
       <button 
-        class="book-button" 
         (click)="createBooking()"
-        [disabled]="countSelectedSeats() !== selectedSeats"
-      >
-        Confirm Booking
+        [disabled]="selectedSeatsSet.size === 0"
+        class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-label-lg text-label-lg uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_8px_30px_rgb(229,9,20,0.3)] mt-2 disabled:opacity-50 disabled:cursor-not-allowed">
+        Confirm & Pay
       </button>
+
+      <p class="text-center text-on-surface-variant text-[10px] uppercase tracking-tighter opacity-50">
+        Free cancellation up to 2 hours before showtime.
+      </p>
     </div>
-  </div>
-  
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+  </aside>
+</div>

@@ -1,65 +1,208 @@
-<div class="container">
-    <h1>Movie Management</h1>
-    
-    <button class="btn btn-add" (click)="addNewMovie()">
-      Add New Movie
+<main class="pt-32 pb-stack-lg px-margin-mobile md:px-margin-desktop min-h-screen">
+<!-- Dashboard Header -->
+<section class="mb-stack-lg flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md">
+<div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">Manage Movies</h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg">Curate the cinema experience. Update listings, statuses, and schedules.</p>
+</div>
+<div class="flex gap-4">
+    <button (click)="addNewMovie()" class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-3 rounded-lg font-label-lg text-label-lg hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-primary-container/20">
+        <span class="material-symbols-outlined" data-icon="add">add</span>
+        Add New Movie
     </button>
-  
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-  
-    <div class="movies-grid">
-      <div *ngFor="let movie of movies" class="movie-card">
-        <div class="movie-image">
-          <img 
-          [src]="'https://picsum.photos/200/300' + movie.title" 
-            alt="{{ movie.title }}"
-            onerror="this.src='https://via.placeholder.com/400x600?text=Movie+Poster'"
-          >
+</div>
+</section>
+
+<!-- Professional Metrics Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-stack-lg animate-slide-up-fade">
+    <div class="glass-card p-6 rounded-xl flex items-center gap-4 border-l-4 border-primary">
+        <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">movie</span>
         </div>
+        <div>
+            <p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Total Movies</p>
+            <p class="text-3xl font-display-md text-on-surface">{{ totalActiveMovies }}</p>
+        </div>
+    </div>
+    <div class="glass-card p-6 rounded-xl flex items-center gap-4 border-l-4 border-primary-container">
+        <div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container">
+            <span class="material-symbols-outlined">event_seat</span>
+        </div>
+        <div>
+            <p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Total Capacity</p>
+            <p class="text-3xl font-display-md text-on-surface">{{ totalCapacity }}</p>
+        </div>
+    </div>
+    <div class="glass-card p-6 rounded-xl flex items-center gap-4 border-l-4 border-secondary">
+        <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">
+            <span class="material-symbols-outlined">upcoming</span>
+        </div>
+        <div>
+            <p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Upcoming</p>
+            <p class="text-3xl font-display-md text-on-surface">{{ upcomingPremieres }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Premium Search & Filter Bar -->
+<div class="flex flex-col lg:flex-row gap-6 mb-stack-lg relative z-30 animate-slide-up-fade" style="animation-delay: 100ms;">
+    
+    <!-- Animated Search Capsule -->
+    <div class="relative group flex-1" (click)="searchInput.focus()">
+        <!-- Glow Backdrop -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-0 group-focus-within:opacity-30 transition-opacity duration-1000"></div>
         
-        <div class="movie-details">
-          <h2>{{ movie.title }}</h2>
-          
-          <div class="detail-row">
-            <strong>Genre:</strong> 
-            <span>{{ movie.genre }}</span>
-          </div>
-          
-          <div class="detail-row">
-            <strong>Duration:</strong> 
-            <span>{{ movie.duration }} minutes</span>
-          </div>
-          
-          <div class="detail-row">
-            <strong>Ticket Price:</strong> 
-            <span>₹{{ movie.price }}</span>
-          </div>
-          
-          <div class="detail-row">
-            <strong>Total Seats:</strong> 
-            <span>{{ movie.totalSeats }}</span>
-          </div>
-          
-          <div class="movie-actions">
-            <button 
-              class="btn btn-edit" 
-              (click)="updateMovie(movie)"
-            >
-              Edit
-            </button>
+        <div class="relative glass-card h-16 rounded-2xl flex items-center px-6 gap-4 border border-white/10 group-focus-within:border-primary/50 transition-all duration-500 shadow-xl overflow-hidden bg-[#121212]/80 backdrop-blur-md">
             
-            <button 
-              class="btn btn-delete" 
-              (click)="deleteMovie(movie.id)"
-            >
-              Delete
+            <!-- Search Icon Animation -->
+            <div class="relative w-8 h-8 flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant absolute transition-all duration-500 transform group-focus-within:scale-0 group-focus-within:opacity-0 group-focus-within:rotate-90">search</span>
+                <span class="material-symbols-outlined text-primary absolute transition-all duration-500 transform scale-0 opacity-0 -rotate-90 group-focus-within:scale-100 group-focus-within:opacity-100 group-focus-within:rotate-0">movie</span>
+            </div>
+            
+            <input #searchInput [(ngModel)]="searchTerm" (focus)="isSearchFocused = true" (blur)="isSearchFocused = false" 
+                   class="bg-transparent border-none focus:ring-0 text-on-surface text-lg w-full placeholder:text-on-surface-variant/40 transition-all duration-300" 
+                   placeholder="Discover movies by title, genre, or director..." type="text"/>
+                   
+            <!-- Search Clear Button -->
+            <button *ngIf="searchTerm" (click)="searchTerm = ''; searchInput.focus(); $event.stopPropagation();" class="text-on-surface-variant hover:text-white transition-colors animate-in zoom-in">
+                <span class="material-symbols-outlined text-xl">close</span>
             </button>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  
-  
+    
+    <!-- Custom Animated Dropdown Filter -->
+    <div class="relative lg:w-72">
+        <!-- Dropdown Trigger -->
+        <div (click)="toggleCustomFilter()" class="glass-card h-16 rounded-2xl flex items-center justify-between px-6 border transition-all duration-500 cursor-pointer shadow-xl bg-[#121212]/80 backdrop-blur-md hover:bg-white/5"
+             [ngClass]="isCustomFilterOpen ? 'border-primary shadow-[0_0_30px_-5px_rgba(229,9,20,0.3)]' : 'border-white/10'">
+            
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined transition-colors duration-300" [ngClass]="statusFilter === 'All' ? 'text-on-surface-variant' : (statusFilter === 'Now Showing' ? 'text-primary' : 'text-secondary')">
+                    {{ statusFilter === 'All' ? 'filter_list' : (statusFilter === 'Now Showing' ? 'play_circle' : 'upcoming') }}
+                </span>
+                <span class="text-on-surface font-medium text-lg">
+                    {{ statusFilter === 'All' ? 'All Statuses' : statusFilter }}
+                </span>
+            </div>
+            
+            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-500" [ngClass]="{'rotate-180 bg-primary/20 text-primary': isCustomFilterOpen}">
+                <span class="material-symbols-outlined text-xl">keyboard_arrow_down</span>
+            </div>
+        </div>
+
+        <!-- Invisible Backdrop to close dropdown -->
+        <div *ngIf="isCustomFilterOpen" (click)="isCustomFilterOpen = false" class="fixed inset-0 z-40"></div>
+
+        <!-- Dropdown Menu -->
+        <div *ngIf="isCustomFilterOpen" class="absolute top-[calc(100%+0.5rem)] left-0 w-full glass-card border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 animate-in slide-in-from-top-2 fade-in duration-300 transform origin-top backdrop-blur-xl bg-[#121212]/95">
+            <div class="p-2 flex flex-col gap-1">
+                <button (click)="selectStatus('All')" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-left w-full hover:bg-white/10 group" [ngClass]="{'bg-white/10 font-bold': statusFilter === 'All'}">
+                    <span class="material-symbols-outlined text-on-surface-variant group-hover:text-white transition-colors">filter_list</span>
+                    <span class="text-on-surface">All Statuses</span>
+                    <span *ngIf="statusFilter === 'All'" class="material-symbols-outlined text-white ml-auto text-sm animate-in zoom-in">check</span>
+                </button>
+                
+                <button (click)="selectStatus('Now Showing')" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-left w-full hover:bg-primary/20 group" [ngClass]="{'bg-primary/20 font-bold text-primary': statusFilter === 'Now Showing'}">
+                    <span class="material-symbols-outlined text-primary opacity-70 group-hover:opacity-100 transition-opacity">play_circle</span>
+                    <span [ngClass]="statusFilter === 'Now Showing' ? 'text-primary' : 'text-on-surface'">Now Showing</span>
+                    <span *ngIf="statusFilter === 'Now Showing'" class="material-symbols-outlined text-primary ml-auto text-sm animate-in zoom-in">check</span>
+                </button>
+                
+                <button (click)="selectStatus('Upcoming')" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-left w-full hover:bg-secondary/20 group" [ngClass]="{'bg-secondary/20 font-bold text-secondary': statusFilter === 'Upcoming'}">
+                    <span class="material-symbols-outlined text-secondary opacity-70 group-hover:opacity-100 transition-opacity">upcoming</span>
+                    <span [ngClass]="statusFilter === 'Upcoming' ? 'text-secondary' : 'text-on-surface'">Upcoming</span>
+                    <span *ngIf="statusFilter === 'Upcoming'" class="material-symbols-outlined text-secondary ml-auto text-sm animate-in zoom-in">check</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="errorMessage" class="text-error bg-error-container/20 p-4 rounded-xl mb-4 text-center font-bold">
+    {{ errorMessage }}
+</div>
+
+<!-- Movie Management Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+    <div *ngFor="let movie of filteredMovies; let i = index" class="relative group rounded-xl overflow-hidden glass-card hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(229,9,20,0.3)] hover:-translate-y-2 flex flex-col h-[400px] animate-slide-up-fade" [style.animation-delay]="(i * 100) + 'ms'">
+        
+        <!-- Poster Background -->
+        <div class="absolute inset-0 z-0">
+            <img [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + movie.title + '/400/600')" alt="Movie Poster" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            <!-- Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/80 to-transparent"></div>
+        </div>
+
+        <!-- Status Badge -->
+        <div class="absolute top-4 right-4 z-10">
+            <span class="px-3 py-1 rounded-full text-xs font-bold tracking-wider backdrop-blur-md shadow-lg"
+                  [ngClass]="{
+                      'bg-primary-container/80 text-white border border-primary-container': getMovieStatus(movie) === 'Now Showing',
+                      'bg-secondary/80 text-white border border-secondary': getMovieStatus(movie) === 'Upcoming',
+                      'bg-surface-variant/80 text-on-surface-variant border border-outline': getMovieStatus(movie) === 'Ended'
+                  }">
+                {{ getMovieStatus(movie) }}
+            </span>
+        </div>
+
+        <!-- Content (Bottom Aligned) -->
+        <div class="relative z-10 mt-auto p-6 flex flex-col gap-2">
+            <h3 class="font-headline-md text-headline-md text-white line-clamp-2 leading-tight">{{ movie.title }}</h3>
+            
+            <div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-[16px]">movie</span>
+                <span>{{ movie.genre }}</span>
+            </div>
+            
+            <div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                <span>{{ movie.duration }} mins</span>
+                <span class="opacity-50">•</span>
+                <span>{{ movie.totalSeats }} Seats</span>
+            </div>
+
+            <div class="flex items-center gap-2 text-primary-container text-label-md mt-1 font-medium">
+                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                <span>{{ $any(movie).showDate | date:'mediumDate' }}</span>
+                <span *ngIf="$any(movie).showTime" class="opacity-50">•</span>
+                <span *ngIf="$any(movie).showTime">{{ $any(movie).showTime }}</span>
+            </div>
+            
+            <div class="text-white font-bold mt-1">₹{{ movie.price }}</div>
+        </div>
+
+        <!-- Hover Actions -->
+        <div class="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+            <button (click)="updateMovie(movie)" class="flex flex-col items-center justify-center w-14 h-14 rounded-full bg-primary-container text-on-primary-container hover:scale-110 transition-transform duration-300 shadow-lg" title="Edit">
+                <span class="material-symbols-outlined">edit</span>
+            </button>
+            <button (click)="deleteMovie(movie.id)" class="flex flex-col items-center justify-center w-14 h-14 rounded-full bg-error text-on-error hover:scale-110 transition-transform duration-300 shadow-lg" title="Delete">
+                <span class="material-symbols-outlined">delete</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="movies.length === 0 && !errorMessage" class="text-center py-20 animate-fade-in-scale">
+    <div class="relative w-32 h-32 mx-auto mb-6">
+        <div class="absolute inset-0 bg-primary/20 rounded-full animate-ping opacity-75"></div>
+        <div class="relative flex items-center justify-center w-full h-full bg-[#151515] rounded-full border border-white/10 shadow-[0_0_40px_rgba(229,9,20,0.2)]">
+            <span class="material-symbols-outlined text-6xl text-primary animate-[spin_10s_linear_infinite]">movie</span>
+        </div>
+    </div>
+    <h3 class="font-display-md text-3xl text-white mb-2">No Movies Found</h3>
+    <p class="text-on-surface-variant mb-8 max-w-md mx-auto text-lg">Your cinematic catalog is currently empty. Start by adding a new masterpiece to the schedule.</p>
+    <button (click)="addNewMovie()" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-primary-container hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_30px_rgba(229,9,20,0.4)]">
+        <span class="material-symbols-outlined">add_circle</span>
+        Add Your First Movie
+    </button>
+</div>
+
+<!-- Pagination -->
+<div *ngIf="movies.length > 0" class="p-stack-md border-t border-white/10 flex justify-between items-center bg-white/5">
+<span class="text-on-surface-variant text-label-md font-medium">Showing {{ movies.length }} movies</span>
+</div>
+
+</main>

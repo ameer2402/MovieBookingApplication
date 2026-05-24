@@ -1,6 +1,9 @@
 package com.examly.springapp.service.serviceImpl;
 
 import java.util.List;
+import java.util.ArrayList;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,32 @@ public class BookingServiceImpl implements BookingService {
     public Booking createBooking(int userId, Long movieId, Booking booking) {
         Movie movie = movieRepo.findById(movieId)
                 .orElseThrow(() -> new MovieNotFoundException("Movie Not FOund"));
+
+        // Implement True Concurrency and Seat Blocking
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> blocked = new ArrayList<>();
+            if (movie.getBlockedSeats() != null && !movie.getBlockedSeats().trim().isEmpty() && !movie.getBlockedSeats().equals("[]")) {
+                blocked = mapper.readValue(movie.getBlockedSeats(), new TypeReference<List<String>>() {});
+            }
+            
+            if (booking.getSelectedSeats() != null && !booking.getSelectedSeats().trim().isEmpty()) {
+                String[] newSeats = booking.getSelectedSeats().split(",\\s*");
+                for (String s : newSeats) {
+                    if (blocked.contains(s)) {
+                        throw new BookingNotFoundException("Seat " + s + " is already booked by another user!");
+                    }
+                    blocked.add(s);
+                }
+            }
+            
+            movie.setBlockedSeats(mapper.writeValueAsString(blocked));
+            movieRepo.save(movie); // Save the movie with the newly blocked seats instantly
+            
+        } catch (Exception e) {
+            if (e instanceof BookingNotFoundException) throw (BookingNotFoundException)e;
+            e.printStackTrace();
+        }
 
         int totalBookedSeats = bookingRepo.countBookedSeatsByMovie(movieId);
         if ((totalBookedSeats + booking.getSeatCount()) > movie.getTotalSeats()) {

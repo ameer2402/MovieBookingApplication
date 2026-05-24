@@ -17,10 +17,15 @@ export class UserviewmovieComponent implements OnInit {
     this.loadMovies();
   }
   loadMovies():void{
-    this.movieService.getAllMovies().subscribe(
-      (data)=>(this.movies=data),
-      (error)=>(this.errorMessage="Error Loading Movies")
-    );
+      this.movieService.getAllMovies().subscribe({
+        next: (data) => {
+          this.movies = data.reverse();
+        },
+        error: (error) => {
+          this.errorMessage = 'Error loading movies';
+          console.error('Load movies error', error);
+        }
+      });
   }
   navigateToBooking(movieId:number){
     this.router.navigate(['/user/bookMovie',movieId]);

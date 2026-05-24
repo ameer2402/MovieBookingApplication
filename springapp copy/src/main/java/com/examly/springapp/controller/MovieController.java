@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.entity.Movie;
 import com.examly.springapp.service.MovieService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -24,14 +25,57 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    private boolean hasCollision(Movie newMovie) {
+        if (newMovie.getSelectedScreenId() == null || newMovie.getShowDate() == null || newMovie.getShowTime() == null) {
+            return false;
+        }
+
+        List<Movie> existingMovies = movieService.getAllMovies();
+        
+        long newStartMillis = parseTime(newMovie.getShowDate(), newMovie.getShowTime());
+        long newEndMillis = newStartMillis + (newMovie.getDuration() * 60000L);
+
+        for (Movie existing : existingMovies) {
+            if (existing.getId() == newMovie.getId()) continue;
+            
+            if (newMovie.getSelectedScreenId().equals(existing.getSelectedScreenId()) && 
+                newMovie.getShowDate().equals(existing.getShowDate())) {
+                
+                long existingStartMillis = parseTime(existing.getShowDate(), existing.getShowTime());
+                long existingEndMillis = existingStartMillis + (existing.getDuration() * 60000L);
+
+                if (newStartMillis < existingEndMillis && existingStartMillis < newEndMillis) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private long parseTime(String date, String time) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+            java.util.Date d = sdf.parse(date + " " + time);
+            return d.getTime();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Movie> addMovie(@RequestBody Movie m) {
+    public ResponseEntity<Movie> addMovie(@Valid @RequestBody Movie m) {
+        if (hasCollision(m)) {
+            throw new IllegalArgumentException("Collision Detected: Screen is already booked during this time.");
+        }
         Movie m2 = movieService.addMovie(m);
         return ResponseEntity.status(200).body(m2);
     }
 
     @PutMapping("/{movieId}")
-    public ResponseEntity<Movie> update(@PathVariable Long movieId, @RequestBody Movie m) {
+    public ResponseEntity<Movie> update(@PathVariable Long movieId, @Valid @RequestBody Movie m) {
+        if (hasCollision(m)) {
+            throw new IllegalArgumentException("Collision Detected: Screen is already booked during this time.");
+        }
         Movie m2 = movieService.updateMovie(movieId, m);
         if (m2 == null) {
             return ResponseEntity.status(500).build();
@@ -42,11 +86,7 @@ public class MovieController {
     @GetMapping
     public ResponseEntity<List<Movie>> getAllMovies() {
         List<Movie> movies = movieService.getAllMovies();
-        if(movies.isEmpty()){
-            return ResponseEntity.status(404).body(Collections.emptyList());
-        }
         return new ResponseEntity<>(movies, HttpStatus.OK);
-
     }
 
     @GetMapping("/{movieId}")
@@ -56,7 +96,6 @@ public class MovieController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.status(200).body(movie);
-
     }
 
     @DeleteMapping("/{movieId}")
@@ -67,5 +106,4 @@ public class MovieController {
         }
         return ResponseEntity.status(200).body(isDeleted);
     }
-
 }

@@ -1,21 +1,414 @@
-<div class="welcome-container">
-    <h1 class="welcome-title">Welcome to MovieBooking: Your Ultimate Cinema Experience</h1>
+<!-- HERO SECTION: 3D Stacked Carousel -->
+<section class="relative h-[85vh] w-full bg-[#0a0a0a] overflow-hidden flex items-center justify-center pt-16">
     
-    <p class="welcome-text">
-      At MovieBooking, we strive to provide you with the best cinematic experiences. Whether you're looking 
-      for the latest blockbusters, indie films, or family favorites, our platform offers an extensive 
-      selection of movies to suit every taste.
-    </p>
-    
-    <p class="welcome-text">
-      With our user-friendly interface, you can easily browse movie listings, check showtimes, and book 
-      your tickets in just a few clicks. Enjoy exclusive discounts and promotions while experiencing 
-      the thrill of the big screen.
-    </p>
-  
-    <p class="welcome-text">
-      Join us in making your movie nights unforgettable! Discover new films, read reviews, and plan your 
-      next outing with friends and family. MovieBooking is here to enhance your cinema journey.
-    </p>
+  <!-- Ambient Backdrop Glow based on current movie -->
+  <div class="absolute inset-0 transition-all duration-1000 ease-in-out opacity-40 blur-3xl scale-110"
+       [style.backgroundImage]="'url(' + ($any(carouselMovies[currentSlide])?.posterBase64 || 'https://picsum.photos/seed/' + encodeTitle(carouselMovies[currentSlide]?.title || 'Movie') + '/1920/1080') + ')'"
+       style="background-size: cover; background-position: center;">
   </div>
+  <div class="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/80 to-transparent z-10"></div>
+
+  <!-- 3D Stacked Deck -->
+  <div class="relative w-full max-w-7xl h-[60vh] flex items-center justify-center perspective-[1500px] z-20">
+      <ng-container *ngFor="let movie of carouselMovies; let i = index">
+          
+          <div class="absolute w-[80%] md:w-[60%] lg:w-[40%] aspect-[2/3] max-h-[70vh] transition-all duration-700 ease-out cursor-pointer rounded-2xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)]"
+               (click)="setSlide(i)"
+               [ngStyle]="{
+                   'transform': getCarouselTransform(i),
+                   'z-index': getCarouselZIndex(i),
+                   'opacity': getCarouselOpacity(i),
+                   'filter': i === currentSlide ? 'none' : 'brightness(0.4) blur(4px)'
+               }">
+              
+              <!-- Image -->
+              <img [src]="$any(movie).posterBase64 || ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/800/1200')" 
+                   [alt]="movie.title" 
+                   class="w-full h-full object-cover"/>
+                   
+              <!-- Content Overlay (Only visible on active slide) -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-8 transition-opacity duration-500"
+                   [ngClass]="i === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'">
+                  
+                  <div class="flex items-center gap-3 mb-3">
+                      <span class="px-3 py-1 bg-primary-container/20 text-primary-container border border-primary-container/30 text-xs font-bold uppercase tracking-wider rounded backdrop-blur-sm">{{ movie.genre }}</span>
+                      <div class="flex items-center gap-1 text-secondary text-sm font-bold bg-black/40 px-2 py-1 rounded backdrop-blur-sm">
+                          <span class="material-symbols-outlined text-[16px]">star</span>
+                          <span>{{ movie.rating | number:'1.1-1' }}</span>
+                      </div>
+                  </div>
+                  
+                  <h1 class="font-display-lg text-3xl md:text-4xl text-white mb-2 leading-tight drop-shadow-2xl">{{ movie.title }}</h1>
+                  
+                  <p class="text-on-surface-variant mb-6 line-clamp-2 text-sm max-w-xl drop-shadow-lg">
+                      {{ movie.duration }} minutes. Experience the latest blockbuster only at CinePrestige.
+                  </p>
+                  
+                  <button (click)="openQuickView(movie); $event.stopPropagation()" class="w-fit bg-primary-container text-on-primary-container px-6 py-2 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shadow-[0_0_30px_rgba(229,9,20,0.4)]">
+                      <span class="material-symbols-outlined text-[20px]">info</span>
+                      View Details
+                  </button>
+              </div>
+          </div>
+      </ng-container>
+  </div>
+
+  <!-- Carousel Navigation Indicators -->
+  <div class="absolute bottom-10 flex gap-3 z-30">
+      <button *ngFor="let movie of carouselMovies; let i = index" 
+              (click)="setSlide(i)"
+              class="h-1.5 rounded-full transition-all duration-300"
+              [ngClass]="i === currentSlide ? 'w-10 bg-primary-container shadow-[0_0_10px_rgba(229,9,20,0.8)]' : 'w-4 bg-white/30 hover:bg-white/60'">
+      </button>
+  </div>
+</section>
+
+<!-- Removed Location Dropdown -->
+
+<!-- Fallback if no movies -->
+<section *ngIf="carouselMovies.length === 0" class="relative h-[60vh] w-full flex items-center justify-center bg-surface-container-lowest">
+    <div class="text-center">
+        <span class="material-symbols-outlined text-6xl text-white/20 mb-4">movie</span>
+        <h2 class="text-2xl text-on-surface-variant">No Movies Currently Available</h2>
+    </div>
+</section>
   
+  <!-- Main Content -->
+  <main class="space-y-stack-lg py-stack-lg bg-background">
+  
+  <!-- Global Filters (Date) -->
+  <section class="px-margin-mobile md:px-margin-desktop mb-8 animate-slide-up-fade">
+      <div class="flex flex-col md:flex-row items-center justify-between glass-card p-6 rounded-2xl border border-white/5 bg-gradient-to-r from-white/5 to-transparent shadow-lg">
+          <div class="mb-4 md:mb-0">
+              <h2 class="font-display-sm text-2xl text-on-surface mb-1 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary-container">explore</span>
+                  Discover by Date
+              </h2>
+              <p class="text-on-surface-variant text-sm">Find blockbuster movies playing on a specific day</p>
+          </div>
+          <div class="flex items-center gap-3 w-full md:w-auto">
+              <button *ngIf="filterDate" (click)="clearDateFilter()" class="text-sm font-bold text-on-surface-variant hover:text-white transition-colors">Clear</button>
+              <div class="flex items-center gap-3 bg-[#0a0a0a] px-4 py-3 rounded-xl border border-white/10 hover:border-primary-container/50 focus-within:border-primary-container transition-all flex-1 md:flex-none">
+                  <span class="material-symbols-outlined text-primary-container text-sm">calendar_today</span>
+                  <input type="date" 
+                         [(ngModel)]="filterDate" 
+                         (ngModelChange)="onDateChange()"
+                         class="bg-transparent border-none text-white focus:ring-0 outline-none text-sm font-bold cursor-pointer w-full [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert">
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Top Rated Movies -->
+  <section class="px-margin-mobile md:px-margin-desktop" *ngIf="topRatedMovies.length > 0">
+  <div class="flex justify-between items-end mb-stack-md">
+  <div>
+  <h2 class="font-headline-md text-headline-md text-secondary">Highest Rated</h2>
+  <p class="text-on-surface-variant font-label-md text-label-md">Critically acclaimed by our users</p>
+  </div>
+  </div>
+  <div class="relative group/carousel">
+      <button *ngIf="checkOverflow(topCarousel)" (click)="scrollRow(topCarousel, 'left')" class="absolute left-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+          <span class="material-symbols-outlined font-bold text-2xl">chevron_left</span>
+      </button>
+
+      <div #topCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
+          <div *ngFor="let movie of topRatedMovies" class="flex-none w-64 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+              <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] border border-secondary/20 transition-all duration-300">
+                  <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
+                  <div class="absolute top-2 right-2 bg-secondary text-on-secondary font-bold px-2 py-1 rounded flex items-center gap-1 text-xs z-10" *ngIf="movie.rating">
+                     <span class="material-symbols-outlined text-[14px]">star</span>
+                     {{movie.rating?.toFixed(1)}}
+                  </div>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface truncate">{{ movie.title }}</h3>
+              <p class="text-on-surface-variant font-label-sm text-[11px] truncate uppercase tracking-wider mb-1">{{ movie.genre }} • {{ movie.language || 'EN' }} • {{ movie.duration }}m</p>
+              <div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-xs mt-1">
+                  <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                  <span>{{ movie.showDate | date:'MMM d' }}</span>
+                  <span class="text-primary-container font-bold ml-auto">{{ movie.showTime }}</span>
+              </div>
+              <div *ngIf="movie.city" class="flex items-center gap-1 text-on-surface-variant font-label-sm text-[11px] mt-1 truncate">
+                  <span class="material-symbols-outlined text-[12px] text-error">location_on</span>
+                  <span>{{ movie.theatreName ? (movie.theatreName + ', ' + movie.city) : movie.city }}</span>
+              </div>
+          </div>
+      </div>
+      
+      <button *ngIf="checkOverflow(topCarousel)" (click)="scrollRow(topCarousel, 'right')" class="absolute right-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+          <span class="material-symbols-outlined font-bold text-2xl">chevron_right</span>
+      </button>
+  </div>
+  </section>
+
+  <!-- Movies by Genre -->
+  <ng-container *ngFor="let genre of genreKeys">
+  <section class="px-margin-mobile md:px-margin-desktop py-stack-sm" *ngIf="moviesByGenre[genre].length > 0">
+  <div class="flex justify-between items-end mb-stack-md">
+  <div>
+  <h2 class="font-headline-md text-headline-md text-on-surface">{{ genre }}</h2>
+  </div>
+  </div>
+  <div class="relative group/carousel">
+      <button *ngIf="checkOverflow(genreCarousel)" (click)="scrollRow(genreCarousel, 'left')" class="absolute left-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+          <span class="material-symbols-outlined font-bold text-2xl">chevron_left</span>
+      </button>
+
+      <div #genreCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
+          <div *ngFor="let movie of moviesByGenre[genre]" class="flex-none w-48 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+              <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] transition-all duration-300">
+                  <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
+                  <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1 z-10" *ngIf="movie.rating">
+                      <span class="material-symbols-outlined text-[12px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+                      {{ movie.rating.toFixed(1) }}
+                  </div>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface truncate">{{ movie.title }}</h3>
+              <p class="text-on-surface-variant font-label-sm text-[11px] truncate uppercase tracking-wider mb-1">{{ movie.genre }} • {{ movie.language || 'EN' }} • {{ movie.duration }}m</p>
+              <div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-xs mt-1">
+                  <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                  <span>{{ movie.showDate | date:'MMM d' }}</span>
+                  <span class="text-primary-container font-bold ml-auto">{{ movie.showTime }}</span>
+              </div>
+              <div *ngIf="movie.city" class="flex items-center gap-1 text-on-surface-variant font-label-sm text-[11px] mt-1 truncate">
+                  <span class="material-symbols-outlined text-[12px] text-error">location_on</span>
+                  <span>{{ movie.theatreName ? (movie.theatreName + ', ' + movie.city) : movie.city }}</span>
+              </div>
+          </div>
+      </div>
+      
+      <button *ngIf="checkOverflow(genreCarousel)" (click)="scrollRow(genreCarousel, 'right')" class="absolute right-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+          <span class="material-symbols-outlined font-bold text-2xl">chevron_right</span>
+      </button>
+  </div>
+  </section>
+  </ng-container>
+
+  <!-- Movies by Language -->
+  <ng-container *ngFor="let lang of languageKeys">
+  <section class="px-margin-mobile md:px-margin-desktop py-stack-sm" *ngIf="moviesByLanguage[lang].length > 0">
+  <div class="flex justify-between items-end mb-stack-md">
+  <div>
+  <h2 class="font-headline-md text-headline-md text-on-surface">{{ lang }} Movies</h2>
+  </div>
+  </div>
+  <div class="relative group/carousel">
+      <button *ngIf="checkOverflow(langCarousel)" (click)="scrollRow(langCarousel, 'left')" class="absolute left-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+          <span class="material-symbols-outlined font-bold text-2xl">chevron_left</span>
+      </button>
+
+      <div #langCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
+          <div *ngFor="let movie of moviesByLanguage[lang]" class="flex-none w-48 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+              <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] transition-all duration-300">
+                  <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
+                  <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1 z-10" *ngIf="movie.rating">
+                      <span class="material-symbols-outlined text-[12px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+                      {{ movie.rating.toFixed(1) }}
+                  </div>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface truncate">{{ movie.title }}</h3>
+              <p class="text-on-surface-variant font-label-sm text-[11px] truncate uppercase tracking-wider mb-1">{{ movie.genre }} • {{ movie.language || 'EN' }} • {{ movie.duration }}m</p>
+              <div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-xs mt-1">
+                  <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                  <span>{{ movie.showDate | date:'MMM d' }}</span>
+                  <span class="text-primary-container font-bold ml-auto">{{ movie.showTime }}</span>
+              </div>
+              <div *ngIf="movie.city" class="flex items-center gap-1 text-on-surface-variant font-label-sm text-[11px] mt-1 truncate">
+                  <span class="material-symbols-outlined text-[12px] text-error">location_on</span>
+                  <span>{{ movie.theatreName ? (movie.theatreName + ', ' + movie.city) : movie.city }}</span>
+              </div>
+          </div>
+      </div>
+      
+      <button *ngIf="checkOverflow(langCarousel)" (click)="scrollRow(langCarousel, 'right')" class="absolute right-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+          <span class="material-symbols-outlined font-bold text-2xl">chevron_right</span>
+      </button>
+  </div>
+  </section>
+  </ng-container>
+
+  <!-- Removed Coming Soon Section -->
+
+  <section class="px-margin-mobile md:px-margin-desktop py-stack-lg" *ngIf="allMovies.length > 0">
+     <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">All Movies</h2>
+     <div class="relative group/carousel">
+         <button *ngIf="checkOverflow(allCarousel)" (click)="scrollRow(allCarousel, 'left')" class="absolute left-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+             <span class="material-symbols-outlined font-bold text-2xl">chevron_left</span>
+         </button>
+
+         <div #allCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
+             <div *ngFor="let movie of allMovies" class="flex-none w-48 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+                 <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] transition-all duration-300">
+                     <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
+                     <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1 z-10" *ngIf="movie.rating">
+                         <span class="material-symbols-outlined text-[12px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+                         {{ movie.rating.toFixed(1) }}
+                     </div>
+                 </div>
+                 <h3 class="font-headline-sm text-headline-sm text-on-surface truncate">{{ movie.title }}</h3>
+                 <p class="text-on-surface-variant font-label-sm text-[11px] truncate uppercase tracking-wider mb-1">{{ movie.genre }} • {{ movie.language || 'EN' }} • {{ movie.duration }}m</p>
+                 <div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-xs mt-1">
+                     <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                     <span>{{ movie.showDate | date:'MMM d' }}</span>
+                     <span class="text-primary-container font-bold ml-auto">{{ movie.showTime }}</span>
+                 </div>
+                 <div *ngIf="movie.city" class="flex items-center gap-1 text-on-surface-variant font-label-sm text-[11px] mt-1 truncate">
+                     <span class="material-symbols-outlined text-[12px] text-error">location_on</span>
+                     <span>{{ movie.theatreName ? (movie.theatreName + ', ' + movie.city) : movie.city }}</span>
+                 </div>
+             </div>
+         </div>
+         
+         <button *ngIf="checkOverflow(allCarousel)" (click)="scrollRow(allCarousel, 'right')" class="absolute right-2 top-[40%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-black flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:scale-110 hidden md:flex">
+             <span class="material-symbols-outlined font-bold text-2xl">chevron_right</span>
+         </button>
+     </div>
+  </section>
+
+  </main>
+
+<!-- Quick View Overlay (Available to Guests) -->
+<div *ngIf="selectedMovieForQuickView" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+    <!-- Backdrop Blur -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300" (click)="closeQuickView()"></div>
+    
+    <!-- Modal Content (3D Flip Animation, Fixed Size) -->
+    <div class="relative w-full max-w-5xl bg-[#131313] border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row transform-gpu animate-flip-in md:h-[550px]">
+        
+        <!-- Close Button -->
+        <button (click)="closeQuickView()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-primary-container text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:rotate-90">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <!-- Left Image with staggered fade-in -->
+        <div class="w-full md:w-5/12 h-64 md:h-full relative opacity-0 animate-[fade-in-scale_0.6s_ease-out_0.2s_forwards] flex-shrink-0">
+            <img class="w-full h-full object-cover" 
+                 [src]="$any(selectedMovieForQuickView).posterBase64 ? $any(selectedMovieForQuickView).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(selectedMovieForQuickView.title) + '/400/600')" 
+                 [alt]="selectedMovieForQuickView.title"/>
+            <!-- Elegant Vignette -->
+            <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#131313] via-[#131313]/40 to-transparent opacity-90"></div>
+            <!-- Glow Effect -->
+            <div class="absolute inset-0 bg-primary-container/20 mix-blend-overlay"></div>
+        </div>
+
+        <!-- Right Details with staggered slide-up -->
+        <div class="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative z-10 overflow-y-auto">
+            
+            <div class="flex items-center gap-2 mb-3 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.3s_forwards]">
+                <span class="px-2 py-1 bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/5">{{ selectedMovieForQuickView.genre }}</span>
+                <span *ngIf="selectedMovieForQuickView.rating" class="flex items-center gap-1 text-secondary text-xs font-bold bg-secondary/10 px-2 py-1 rounded">
+                    <span class="material-symbols-outlined text-[14px]">star</span>
+                    {{ selectedMovieForQuickView.rating | number:'1.1-1' }}
+                </span>
+            </div>
+            
+            <h2 class="font-display-lg text-3xl md:text-5xl text-on-surface mb-3 leading-tight opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.4s_forwards]" style="text-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                {{ selectedMovieForQuickView.title }}
+            </h2>
+            
+            <div class="flex items-center gap-4 text-on-surface-variant text-sm mb-6 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.5s_forwards]">
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> {{ selectedMovieForQuickView.duration }} min</span>
+                <span class="w-1 h-1 bg-white/20 rounded-full"></span>
+                <span class="flex items-center gap-1 text-primary-container font-bold"><span class="material-symbols-outlined text-[16px]">location_on</span> {{ quickViewScreenName }}</span>
+                <span *ngIf="quickViewScreenAddress" class="flex items-center gap-1 text-on-surface-variant text-xs"><span class="material-symbols-outlined text-[14px]">map</span> {{ quickViewScreenAddress }}</span>
+            </div>
+            
+            <p class="text-on-surface-variant mb-8 text-lg leading-relaxed opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.6s_forwards]">
+                Experience <span class="text-white font-semibold">{{ selectedMovieForQuickView.title }}</span> exclusively at CINEPRESTIGE. Immerse yourself in our premium auditoriums featuring state-of-the-art projection and sound. Reserve your seats now to secure the best view in the house.
+            </p>
+
+            <div class="flex items-center gap-4 mt-auto opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.7s_forwards] pt-4">
+                <button [routerLink]="['/user/bookMovie', selectedMovieForQuickView.id]" class="w-full bg-primary-container text-on-primary-container py-5 rounded-xl font-bold text-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(229,9,20,0.4)]">
+                    <span class="material-symbols-outlined text-[28px]">confirmation_number</span>
+                    Book Tickets Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Date Filter Popup Overlay -->
+<div *ngIf="showDatePopup" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl transition-opacity duration-300" (click)="closeDatePopup()"></div>
+    
+    <!-- Modal Content -->
+    <div class="relative w-full max-w-6xl max-h-[85vh] bg-[#0f0f0f] border border-white/10 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col transform-gpu animate-[slide-up-fade_0.4s_ease-out_forwards]">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between p-6 border-b border-white/10 bg-black/40">
+            <div>
+                <h2 class="font-display-md text-3xl text-white mb-1">Movies on {{ filterDate | date:'MMMM d, yyyy' }}</h2>
+                <p class="text-on-surface-variant text-sm">Select a movie to view details and book tickets.</p>
+            </div>
+            <button (click)="closeDatePopup()" class="w-10 h-10 bg-white/5 hover:bg-error/20 text-white hover:text-error rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300 shadow-lg">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="p-8 overflow-y-auto scrollbar-hide" style="max-height: calc(85vh - 100px);">
+            <!-- Empty State -->
+            <div *ngIf="popupFilteredMovies.length === 0" class="text-center py-20 animate-fade-in">
+                <span class="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4">event_busy</span>
+                <h3 class="text-2xl text-on-surface-variant font-headline-md mb-2">No Screenings Found</h3>
+                <p class="text-on-surface-variant/60">There are no movies scheduled for this date. Try another day.</p>
+                <button (click)="closeDatePopup()" class="mt-6 px-6 py-2 border border-white/20 rounded-lg hover:bg-white/10 text-white transition-colors">Go Back</button>
+            </div>
+
+            <!-- Movies Grid -->
+            <div *ngIf="popupFilteredMovies.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <div *ngFor="let movie of popupFilteredMovies; let i = index" 
+                     class="group cursor-pointer animate-[fade-in-scale_0.4s_ease-out_forwards]" 
+                     [ngStyle]="{'animation-delay': (i * 50) + 'ms'}" 
+                     (click)="openQuickView(movie); showDatePopup = false;">
+                     
+                    <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3 glass-card transform group-hover:scale-[1.05] group-hover:border-primary-container/50 transition-all duration-300 shadow-lg">
+                        <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                             <div class="bg-primary-container text-on-primary-container text-xs font-bold text-center py-2 rounded transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-[0_0_15px_rgba(229,9,20,0.5)]">
+                                Quick View
+                             </div>
+                        </div>
+                        
+                        <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1" *ngIf="movie.rating">
+                            <span class="material-symbols-outlined text-[12px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+                            {{ movie.rating.toFixed(1) }}
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-headline-sm text-sm text-white truncate drop-shadow-md">{{ movie.title }}</h3>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-on-surface-variant text-[11px] uppercase tracking-wider">{{ movie.genre.split(',')[0] }}</span>
+                        <span class="text-primary-container font-bold text-[11px] bg-primary-container/10 px-2 py-0.5 rounded">{{ movie.showTime }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <!-- Footer -->
+  <footer class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop gap-stack-md w-full py-stack-lg bg-surface-container-lowest">
+  <div class="flex flex-col gap-unit">
+  <span class="font-headline-md text-headline-md text-on-surface">CINEPRESTIGE</span>
+  <span class="font-label-md text-label-md text-on-surface-variant">© 2024 CINEPRESTIGE PREMIERE. ALL RIGHTS RESERVED.</span>
+  </div>
+  <div class="flex flex-wrap justify-center gap-stack-md">
+  <a class="text-on-surface-variant hover:text-primary-container underline transition-all font-label-md text-label-md" href="#">Contact Us</a>
+  <a class="text-on-surface-variant hover:text-primary-container underline transition-all font-label-md text-label-md" href="#">Privacy Policy</a>
+  <a class="text-on-surface-variant hover:text-primary-container underline transition-all font-label-md text-label-md" href="#">Terms of Service</a>
+  <a class="text-on-surface-variant hover:text-primary-container underline transition-all font-label-md text-label-md" href="#">FAQ</a>
+  </div>
+  <div class="flex gap-stack-sm">
+  <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all">
+  <span class="material-symbols-outlined text-sm">public</span>
+  </button>
+  <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all">
+  <span class="material-symbols-outlined text-sm">share</span>
+  </button>
+  <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all">
+  <span class="material-symbols-outlined text-sm">language</span>
+  </button>
+  </div>
+  </footer>

@@ -3,5 +3,6 @@ export interface Booking{
     userId?:number;
     movieId?:number;
     seatCount?:number;
+    selectedSeats?: string;
     totalCost?:number;
 }

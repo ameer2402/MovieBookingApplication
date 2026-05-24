@@ -1,41 +1,152 @@
-<nav class="navbar">
-    <div class="navbar-container">
-        <h1 class="site-title">Book MyShow</h1>
-        <ul class="nav-links">
-            <ng-container *ngIf="!isLoggedIn">
-                <li><a routerLink="/register">Register</a></li>
-                <li><a routerLink="/login">Login</a></li>
-            </ng-container>
-            <ng-container *ngIf="isLoggedIn">
-                <li>
-                    <span class="user-info">
-                        ({{username}})-({{userRole}})
-                    </span>
-                </li>
-                <li ><a routerLink="/">Home</a></li>
-                <ng-container *ngIf="userRole === 'ADMIN'">
-                    <app-admin-nav></app-admin-nav>
-                </ng-container>
-                <ng-container *ngIf="userRole === 'USER'">
-                    <app-user-nav></app-user-nav>
-                </ng-container>
-                <li>
-                    <button (click)="showLogoutPopup = true" class="logout-btn">
-                    Logout
-                    </button>
-                </li>
-            </ng-container>
-        </ul>
-    </div>
+<nav class="fixed top-0 z-50 flex justify-between items-center w-full px-4 md:px-8 bg-[#1a1a1acc] backdrop-blur-xl border-b border-white/10 shadow-2xl transition-all duration-300" 
+     [ngClass]="{'h-16 bg-[#0f0f0f]': isScrolled, 'h-20 bg-[#1a1a1acc]': !isScrolled}">
+     
+<!-- Left Section: Logo & Desktop Links -->
+<div class="flex items-center gap-4 md:gap-8">
+    <!-- Hamburger Menu (Mobile Only) -->
+    <button (click)="toggleMobileMenu()" class="md:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 text-on-surface transition-colors focus:outline-none z-50 relative">
+        <span class="material-symbols-outlined text-2xl transition-transform duration-300" [ngClass]="{'rotate-90 scale-0': isMobileMenuOpen, 'rotate-0 scale-100': !isMobileMenuOpen}">menu</span>
+        <span class="material-symbols-outlined text-2xl absolute transition-transform duration-300" [ngClass]="{'-rotate-90 scale-0': !isMobileMenuOpen, 'rotate-0 scale-100': isMobileMenuOpen}">close</span>
+    </button>
 
-    <div *ngIf="showLogoutPopup" class="logout-popup">
-        <div class="popup-contenr">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to logout.</p>
-            <div class="popup-actions">
-                <button (click)="logout()" class="confirm-btn">Yes, Logout</button>
-                <button (click)="showLogoutPopup = false" class="cancel-btn">Cancel</button>
-            </div>
+    <!-- Brand Logo -->
+    <a routerLink="/" class="font-display-lg text-xl md:text-3xl tracking-tighter text-primary-container relative z-50 hover:text-primary transition-colors">
+        CINEPRESTIGE
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <div class="hidden md:flex items-center gap-6 ml-4">
+        <a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="!text-primary-container !border-primary-container" routerLink="/">Movies</a>
+        
+        <ng-container *ngIf="isLoggedIn">
+            <ng-container *ngIf="userRole === 'ADMIN' || userRole === 'THEATRE_OWNER'">
+                <app-admin-nav class="flex items-center gap-6"></app-admin-nav>
+            </ng-container>
+            <ng-container *ngIf="userRole === 'USER' || userRole === 'SUPER_ADMIN'">
+                <app-user-nav class="flex items-center gap-6"></app-user-nav>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Right Section: Search & Profile -->
+<div class="flex items-center gap-2 md:gap-4 relative z-50">
+
+    <!-- Global Search Bar (Only shown on Home Page) -->
+    <div *ngIf="router.url === '/'" class="flex items-center">
+        <div class="relative flex items-center bg-[#1a1a1a] rounded-full overflow-hidden transition-all duration-500 ease-in-out border border-white/10 shadow-inner"
+             [ngClass]="isSearchActive ? 'w-48 md:w-64 opacity-100' : 'w-10 opacity-70 hover:opacity-100 bg-transparent border-transparent shadow-none'">
+            
+            <button (click)="toggleSearch()" class="w-10 h-10 flex flex-none items-center justify-center text-on-surface hover:text-primary-container transition-colors z-10 focus:outline-none">
+                <span class="material-symbols-outlined">{{ isSearchActive ? 'close' : 'search' }}</span>
+            </button>
+            
+            <input type="text" 
+                   [(ngModel)]="searchQuery" 
+                   (ngModelChange)="onSearchChange()"
+                   placeholder="Search..." 
+                   class="w-full bg-transparent border-none text-on-surface text-sm focus:ring-0 placeholder-on-surface-variant/50 outline-none pr-4 transition-opacity duration-300"
+                   [ngClass]="isSearchActive ? 'opacity-100 visible' : 'opacity-0 invisible'">
         </div>
     </div>
+
+    <!-- Auth Buttons (Logged Out) -->
+    <ng-container *ngIf="!isLoggedIn">
+        <button routerLink="/register" class="hidden md:block text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 text-sm">Register</button>
+        <button routerLink="/login" class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-bold hover:scale-95 transition-all duration-300 text-sm whitespace-nowrap">Login</button>
+    </ng-container>
+
+    <!-- Profile Menu (Logged In) -->
+    <ng-container *ngIf="isLoggedIn">
+        <div class="relative profile-menu-container">
+            <button (click)="toggleProfileDropdown()" class="flex items-center gap-2 px-2 md:px-3 py-1.5 md:py-2 rounded-full border border-white/10 hover:bg-white/5 transition-colors duration-300 focus:outline-none">
+                <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs md:text-sm shadow-inner shadow-black/50">
+                    {{ username ? username.charAt(0).toUpperCase() : 'U' }}
+                </div>
+                <span class="text-on-surface font-medium hidden md:block text-sm">{{ username }}</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 hidden md:block text-sm" [ngClass]="{'rotate-180': isProfileDropdownOpen}">expand_more</span>
+            </button>
+
+            <!-- Desktop/Mobile Dropdown Card -->
+            <div *ngIf="isProfileDropdownOpen" class="absolute right-0 mt-3 w-56 glass-panel rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-200 z-50 border border-white/10 bg-[#121212]/95 backdrop-blur-2xl">
+                <div class="px-4 py-3 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                    <p class="text-sm font-bold text-white">{{ username }}</p>
+                    <p class="text-xs text-primary capitalize font-medium mt-0.5">{{ userRole?.toLowerCase() }} Account</p>
+                </div>
+                <div class="p-2 flex flex-col gap-1">
+                    <a routerLink="/settings" (click)="isProfileDropdownOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-on-surface-variant hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer">
+                        <span class="material-symbols-outlined text-[18px]">settings</span>
+                        Settings
+                    </a>
+                    <a *ngIf="userRole === 'SUPER_ADMIN'" routerLink="/admin/add/owner" (click)="isProfileDropdownOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-primary-container hover:bg-primary-container/10 rounded-lg transition-colors cursor-pointer">
+                        <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                        Provision Owner
+                    </a>
+                    <div class="h-px bg-white/10 my-1"></div>
+                    <button (click)="showLogoutPopup = true; isProfileDropdownOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-error hover:bg-error/10 rounded-lg transition-colors w-full text-left font-medium">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<!-- Mobile Menu Overlay (Sidebar) -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 transition-opacity duration-300 md:hidden" 
+     [ngClass]="isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'"
+     (click)="toggleMobileMenu()">
+    
+    <!-- Mobile Sidebar Content -->
+    <div class="absolute top-0 left-0 w-3/4 max-w-sm h-full bg-[#121212] border-r border-white/10 shadow-2xl flex flex-col transition-transform duration-300 ease-out"
+         [ngClass]="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
+         (click)="$event.stopPropagation()">
+        
+        <div class="p-6 border-b border-white/10 bg-gradient-to-b from-white/5 to-transparent">
+            <p class="text-xs font-bold text-primary tracking-widest uppercase mb-1">Navigation</p>
+            <h2 class="text-2xl font-display-lg text-white">Menu</h2>
+        </div>
+
+        <div class="flex-grow overflow-y-auto p-4 flex flex-col gap-2 mobile-nav-links">
+            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface hover:bg-white/5 hover:text-white transition-all font-medium" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="!text-primary !bg-primary/10" routerLink="/" (click)="toggleMobileMenu()">
+                <span class="material-symbols-outlined">movie</span>
+                Movies
+            </a>
+            
+            <ng-container *ngIf="isLoggedIn">
+                <div class="h-px w-full bg-white/5 my-2"></div>
+                <p class="px-4 text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Actions</p>
+                <div class="flex flex-col gap-2" (click)="toggleMobileMenu()">
+                    <ng-container *ngIf="userRole === 'ADMIN' || userRole === 'THEATRE_OWNER'">
+                        <app-admin-nav class="flex flex-col gap-2"></app-admin-nav>
+                    </ng-container>
+                    <ng-container *ngIf="userRole === 'USER' || userRole === 'SUPER_ADMIN'">
+                        <app-user-nav class="flex flex-col gap-2"></app-user-nav>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="p-4 border-t border-white/10" *ngIf="!isLoggedIn">
+            <button routerLink="/register" (click)="toggleMobileMenu()" class="w-full mb-2 bg-white/5 text-white px-4 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors">Register</button>
+            <button routerLink="/login" (click)="toggleMobileMenu()" class="w-full bg-primary-container text-white px-4 py-3 rounded-xl font-bold shadow-lg hover:bg-primary transition-colors">User Login</button>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Popup -->
+<div *ngIf="showLogoutPopup" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
+    <div class="glass-panel p-8 rounded-3xl max-w-sm w-[90%] text-center border border-white/10 shadow-2xl animate-in zoom-in-95 duration-200">
+        <div class="w-16 h-16 rounded-full bg-error/20 text-error flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-3xl">logout</span>
+        </div>
+        <h3 class="font-headline-md text-2xl text-white font-bold mb-2">Confirm Logout</h3>
+        <p class="text-on-surface-variant mb-8 text-sm">Are you sure you want to end your current session?</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <button (click)="logout()" class="w-full sm:w-auto bg-error text-white px-6 py-3 rounded-xl font-bold hover:bg-red-600 transition-colors shadow-lg shadow-error/20">Yes, Logout</button>
+            <button (click)="showLogoutPopup = false" class="w-full sm:w-auto bg-white/5 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors border border-white/10">Cancel</button>
+        </div>
+    </div>
+</div>
 </nav>

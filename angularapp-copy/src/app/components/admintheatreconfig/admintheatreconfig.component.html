@@ -1,0 +1,268 @@
+<main class="pt-24 pb-stack-lg px-margin-mobile md:px-margin-desktop min-h-screen">
+<!-- Page Header -->
+<header class="mb-stack-lg flex flex-col md:flex-row justify-between items-end gap-stack-md">
+<div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
+  {{ currentView === 'theatres' ? 'Manage Theatres' : selectedTheatre?.name + ' Configuration' }}
+</h1>
+<p class="text-on-surface-variant font-body-lg max-w-2xl">
+  {{ currentView === 'theatres' ? 'Register and manage your franchise locations across different cities.' : 'Design immersive cinematic environments. Map seating zones for the ultimate premiere experience.' }}
+</p>
+</div>
+<div class="flex gap-stack-sm w-full md:w-auto">
+<button *ngIf="currentView === 'screens'" (click)="backToTheatres()" class="px-stack-md py-stack-sm rounded-lg border border-white/20 text-white font-label-lg hover:bg-white/10 transition-all">
+    Back to Theatres
+</button>
+<button *ngIf="currentView === 'screens'" (click)="saveLayout()" class="flex-1 md:flex-none px-stack-lg py-stack-sm rounded-lg bg-primary-container text-on-primary-container font-label-lg hover:opacity-90 transition-all shadow-lg shadow-primary-container/20">
+    Save Configuration
+</button>
+</div>
+</header>
+
+<!-- THEATRES DASHBOARD VIEW -->
+<ng-container *ngIf="currentView === 'theatres'">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        
+        <!-- Theatre Registration Form -->
+        <section class="glass-panel p-stack-md rounded-xl h-fit">
+            <h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary-container">domain_add</span>
+                Register New Theatre
+            </h2>
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1">
+                    <label class="text-label-md text-on-surface-variant uppercase tracking-wider">Theatre Name</label>
+                    <input type="text" [(ngModel)]="newTheatre.name" placeholder="e.g. Cineplex Alpha" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg"/>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-label-md text-on-surface-variant uppercase tracking-wider">City</label>
+                    <input type="text" [(ngModel)]="newTheatre.city" placeholder="e.g. Mumbai" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg"/>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-label-md text-on-surface-variant uppercase tracking-wider">State</label>
+                    <select [(ngModel)]="newTheatre.state" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg appearance-none cursor-pointer">
+                        <option value="" disabled selected>Select a state</option>
+                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Ladakh">Ladakh</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Puducherry">Puducherry</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-label-md text-on-surface-variant uppercase tracking-wider">Number of Screens</label>
+                    <input type="number" [(ngModel)]="newTheatre.numScreens" min="1" max="20" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg"/>
+                </div>
+                <button (click)="createNewTheatre()" class="mt-4 w-full py-3 bg-primary-container text-on-primary-container font-bold rounded-lg hover:scale-[1.02] active:scale-95 transition-all">
+                    Register Theatre
+                </button>
+            </div>
+        </section>
+
+        <!-- Registered Theatres List -->
+        <section class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngIf="theatres.length === 0" class="col-span-full p-8 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center text-center">
+                <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-2">location_off</span>
+                <p class="text-on-surface-variant">No theatres registered yet. Create one to get started.</p>
+            </div>
+            
+            <div *ngFor="let theatre of theatres" (click)="openTheatre(theatre)" class="glass-panel p-6 rounded-xl border border-white/5 hover:border-primary-container/50 hover:bg-white/5 cursor-pointer transition-all group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <h3 class="font-display-sm text-2xl text-white mb-1">{{ theatre.name }}</h3>
+                <p class="flex items-center gap-1 text-sm text-on-surface-variant mb-4">
+                    <span class="material-symbols-outlined text-[16px]">location_on</span> {{ theatre.city }}<span *ngIf="theatre.state">, {{ theatre.state }}</span>
+                </p>
+                <div class="flex justify-between items-center mt-auto relative z-10">
+                    <span class="bg-white/10 px-3 py-1 rounded text-xs font-bold">{{ theatre.numScreens }} Screens</span>
+                    <div class="flex gap-2 items-center">
+                        <button (click)="deleteTheatre(theatre.id, $event)" class="text-error hover:text-error-container hover:bg-error/10 p-2 rounded transition-colors" title="Delete Theatre">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                        <span class="material-symbols-outlined text-primary-container transform translate-x-0 group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</ng-container>
+
+<!-- SCREENS CONFIGURATOR VIEW -->
+<ng-container *ngIf="currentView === 'screens'">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Panel: Configuration Form -->
+<aside class="lg:col-span-4 space-y-stack-md">
+
+<!-- Screen Manager -->
+<section class="glass-panel p-stack-md rounded-xl">
+<h2 class="font-headline-md text-headline-md mb-stack-md flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">meeting_room</span>
+    Screens
+</div>
+<button (click)="addNewScreen()" class="text-primary hover:text-primary-container transition-colors" title="Add New Screen">
+    <span class="material-symbols-outlined">add_circle</span>
+</button>
+</h2>
+
+<div class="space-y-stack-sm mb-4">
+    <div *ngFor="let screen of theatreScreens; let i = index" 
+         (click)="selectScreen(i)"
+         class="p-3 rounded-lg border cursor-pointer transition-all flex justify-between items-center"
+         [ngClass]="selectedScreenIndex === i ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 hover:bg-white/10'">
+        <div class="flex flex-col">
+           <span class="font-label-lg">{{ screen.name }}</span>
+           <span class="text-xs text-on-surface-variant font-bold">{{ screen.type || 'Standard' }}</span>
+        </div>
+        <span class="text-xs text-on-surface-variant">{{ screen.rows }}x{{ screen.cols }}</span>
+    </div>
+</div>
+<button *ngIf="theatreScreens.length > 1" (click)="deleteCurrentScreen()" class="w-full py-2 text-error border border-error/30 rounded-lg hover:bg-error/10 transition-colors font-label-md flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined text-sm">delete</span> Delete Screen
+</button>
+</section>
+
+<!-- Screen Dimensions -->
+<section *ngIf="currentScreen" class="glass-panel p-stack-md rounded-xl">
+<h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">aspect_ratio</span>
+    Screen Properties
+</h2>
+<div class="grid grid-cols-2 gap-stack-md mb-4">
+<div class="flex flex-col gap-1">
+<label class="text-label-md text-on-surface-variant uppercase tracking-wider">Rows</label>
+<input type="number" [(ngModel)]="inputRows" (change)="updateGridSize()" min="1" max="30" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-label-md text-on-surface-variant uppercase tracking-wider">Cols</label>
+<input type="number" [(ngModel)]="inputCols" (change)="updateGridSize()" min="1" max="40" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg"/>
+</div>
+</div>
+<div class="flex flex-col gap-1 mb-4">
+<label class="text-label-md text-on-surface-variant uppercase tracking-wider">Screen Name</label>
+<input type="text" [(ngModel)]="currentScreen.name" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-label-md text-on-surface-variant uppercase tracking-wider">Screen Type</label>
+<select [(ngModel)]="currentScreen.type" class="bg-[#1A1A1A] border-0 border-b-2 border-surface-variant focus:border-primary-container focus:ring-0 text-on-surface font-body-md py-2 px-3 transition-all outline-none rounded-t-lg">
+    <option value="Standard">Standard</option>
+    <option value="IMAX">IMAX</option>
+    <option value="4DX">4DX</option>
+    <option value="Dolby Atmos">Dolby Atmos</option>
+</select>
+</div>
+</section>
+
+<section *ngIf="currentScreen" class="glass-panel p-stack-md rounded-xl">
+<h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">edit_square</span>
+                        Layout Tools
+                    </h2>
+<div class="grid grid-cols-2 gap-stack-sm">
+<button (click)="setTool('standard')" [class.border-2]="currentTool === 'standard'" [class.bg-white_10]="currentTool === 'standard'" class="p-stack-sm rounded-lg bg-white/5 border border-white/10 flex flex-col items-center gap-1 hover:bg-white/10 transition-all active:scale-95" id="tool-standard">
+<span class="material-symbols-outlined text-outline">event_seat</span>
+<span class="text-label-md">Standard</span>
+</button>
+<button (click)="setTool('vip')" [class.border-2]="currentTool === 'vip'" [class.bg-primary-container_20]="currentTool === 'vip'" class="p-stack-sm rounded-lg bg-primary-container/10 border border-primary-container/20 flex flex-col items-center gap-1 hover:bg-primary-container/20 transition-all active:scale-95" id="tool-vip">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1">stars</span>
+<span class="text-label-md">VIP Zone</span>
+</button>
+<button (click)="setTool('platinum')" [class.border-2]="currentTool === 'platinum'" [class.bg-secondary_20]="currentTool === 'platinum'" class="p-stack-sm rounded-lg bg-secondary/10 border border-secondary/20 flex flex-col items-center gap-1 hover:bg-secondary/20 transition-all active:scale-95" id="tool-platinum">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1">diamond</span>
+<span class="text-label-md">Platinum</span>
+</button>
+<button (click)="setTool('delete')" [class.border-2]="currentTool === 'delete'" [class.bg-error-container_20]="currentTool === 'delete'" class="p-stack-sm rounded-lg bg-error-container/10 border border-error-container/20 flex flex-col items-center gap-1 hover:bg-error-container/20 transition-all active:scale-95" id="tool-delete">
+<span class="material-symbols-outlined text-error">close</span>
+<span class="text-label-md">Clear</span>
+</button>
+</div>
+</section>
+</aside>
+<!-- Right Panel: Grid Representation -->
+<div class="lg:col-span-8">
+<div class="glass-panel p-stack-lg rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-center mb-stack-lg">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+<span class="text-label-md text-on-surface-variant">Standard ({{standardCount}})</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="text-label-md text-on-surface-variant">VIP ({{vipCount}})</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-label-md text-on-surface-variant">Platinum ({{platinumCount}})</span>
+</div>
+</div>
+<div class="text-label-lg font-bold text-primary-container">TOTAL SEATS: {{totalSeats}}</div>
+</div>
+<!-- Visual Screen -->
+<div class="flex flex-col items-center mb-stack-lg">
+<div class="w-3/4 h-2 bg-gradient-to-r from-transparent via-tertiary-container to-transparent rounded-full shadow-[0_0_20px_rgba(0,114,215,0.6)]"></div>
+<div class="cinema-screen-glow w-2/3 h-10 mb-10 bg-gradient-to-b from-tertiary-container/40 to-transparent blur-xl"></div>
+<span class="text-label-md uppercase tracking-[0.5em] text-on-surface-variant/50">Cinema Screen</span>
+</div>
+<!-- Seat Grid Interaction -->
+<div *ngIf="currentScreen" class="flex flex-col gap-2 max-w-4xl mx-auto p-4 select-none overflow-x-auto">
+    <div *ngFor="let row of currentScreen.grid; let r = index" class="flex gap-2 justify-center min-w-max">
+        <div *ngFor="let type of row; let c = index" 
+             (mousedown)="applyTool(r, c)"
+             (mouseenter)="applyTool(r, c, $event)"
+             class="w-8 h-8 flex-none rounded-sm cursor-pointer transition-transform hover:scale-110 flex items-center justify-center text-[10px] text-white/50 border-2"
+             [ngClass]="{
+                 'border-outline-variant bg-transparent': type === 'standard',
+                 'border-primary-container bg-primary-container/20': type === 'vip',
+                 'border-secondary bg-secondary/20 shadow-[0_0_10px_rgba(71,250,243,0.3)]': type === 'platinum'
+             }">
+             {{ r }}{{ c }}
+        </div>
+    </div>
+</div>
+
+<div class="mt-stack-lg flex justify-center gap-stack-md text-on-surface-variant/40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">mouse</span>
+<span class="text-label-md italic">Click to paint seat type</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">drag_pan</span>
+<span class="text-label-md italic">Click and drag to batch paint</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</ng-container>
+</main>

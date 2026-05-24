@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +18,13 @@ import { AdminviewbookingComponent } from './components/adminviewbooking/adminvi
 import { UserviewmovieComponent } from './components/userviewmovie/userviewmovie.component';
 import { AdminviewmovieComponent } from './components/adminviewmovie/adminviewmovie.component';
 import { UserviewbookingComponent } from './components/userviewbooking/userviewbooking.component';
+import { AdminaddownerComponent } from './components/adminaddowner/adminaddowner.component';
+import { UsersettingsComponent } from './components/usersettings/usersettings.component';
+import { AdmindashboardComponent } from './components/admindashboard/admindashboard.component';
+import { AdmintheatreconfigComponent } from './components/admintheatreconfig/admintheatreconfig.component';
+import { ToastComponent } from './components/toast/toast.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import { LoaderInterceptor } from './interceptors/loader.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,7 +44,13 @@ import { UserviewbookingComponent } from './components/userviewbooking/userviewb
     AdminviewmovieComponent,
     AdminviewbookingComponent,
     UserviewmovieComponent,
-    UserviewbookingComponent
+    UserviewbookingComponent,
+    AdminaddownerComponent,
+    UsersettingsComponent,
+    AdmindashboardComponent,
+    AdmintheatreconfigComponent,
+    ToastComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +59,10 @@ import { UserviewbookingComponent } from './components/userviewbooking/userviewb
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
+  ],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

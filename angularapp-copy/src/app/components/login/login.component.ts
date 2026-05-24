@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserStoreService } from 'src/app/helpers/user-store.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { Login } from 'src/app/models/login.model';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -12,30 +13,42 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   errorMessage:string='';
+  isAdminView: boolean = false;
+  isSubmitting: boolean = false;
 
   constructor(private authService:AuthService,
     private router:Router,
-    private userStore:UserStoreService) {
+    private userStore:UserStoreService,
+    private toastService: ToastService) {
       
      }
 
   ngOnInit(): void {
 
   }
+
+  toggleAdminView(): void {
+    this.isAdminView = !this.isAdminView;
+    this.errorMessage = ''; // Clear error message on view switch
+  }
+
   login(form:NgForm){
     if(form.valid){
+      this.isSubmitting = true;
       const loginData:Login={
         email:form.value.email,
         password:form.value.password
       };
       this.authService.login(loginData).subscribe({
         next:(user:any)=>{
+          this.isSubmitting = false;
           this.userStore.setUser(user);
-          console.log(user);
+          this.toastService.showSuccess('Login Successful', 'Welcome back!');
           this.redirectBasedOnRole();
         },
         error:(err)=>{
-          this.errorMessage="Invalid Credentials! Please Try Again.";
+          this.isSubmitting = false;
+          this.toastService.showError('Login Failed', 'Invalid credentials or server error.');
           console.log("Login Error",err);
         }
       })
@@ -44,15 +57,11 @@ export class LoginComponent implements OnInit {
   }
   private redirectBasedOnRole():void{
     console.log(this.userStore.authUser);    
-    if(this.userStore.authUser.role ==='ADMIN'){
-      this.router.navigate(['/admin/view/Movies']);
-
+    if(this.userStore.authUser.role ==='ADMIN' || this.userStore.authUser.role === 'THEATRE_OWNER'){
+      this.router.navigate(['/admin/dashboard']);
     }
-    else if(this.userStore.authUser.role === 'USER'){
-      this.router.navigate(['/user/view/Movies']);
-    }
-    else{
-      this.router.navigate(['/']);
+    else {
+      this.router.navigate(['/']); // All normal users go to Home
     }
   }
 

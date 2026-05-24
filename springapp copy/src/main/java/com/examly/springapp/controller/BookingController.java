@@ -24,12 +24,7 @@ public class BookingController {
     @GetMapping("/api/booking")
     public ResponseEntity<List<Booking>> getAll(){
         List<Booking> all=bookingService.getAllBookings();
-        if(all.isEmpty()){
-            return ResponseEntity.status(404).body(Collections.emptyList());
-        }
-        else{
-            return ResponseEntity.status(200).body(all);
-        }
+        return ResponseEntity.status(200).body(all);
     }
 
     @PostMapping("/api/booking/{userId}/{movieId}")
@@ -58,19 +53,11 @@ public class BookingController {
     @GetMapping("api/booking/movie/{movieId}")
     public ResponseEntity<List<Booking>> getBookingBymovieId(@PathVariable Long movieId){
         List<Booking> b=bookingService.getBookingbyMovie(movieId);
-        if(b.isEmpty()){
-            throw new BookingNotFoundException("Booking not found");
-
-        }
         return ResponseEntity.status(200).body(b);
     }
     @GetMapping("api/booking/user/{userId}")
     public ResponseEntity<List<Booking>> getBookingbyUserId(@PathVariable int userId){
         List<Booking> b=bookingService.getBookingByUserId(userId);
-        if(b.isEmpty()){
-            throw new BookingNotFoundException("Booking not found");
-
-        }
         return ResponseEntity.status(200).body(b);
     }
 

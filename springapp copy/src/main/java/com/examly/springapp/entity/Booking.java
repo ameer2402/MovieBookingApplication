@@ -14,6 +14,7 @@ public class Booking {
     private Long id;
     private int seatCount;
     private double totalCost;
+    private String selectedSeats;
     @ManyToOne
     @JoinColumn(name="movieId" , nullable=false)
     private Movie movie;
@@ -25,10 +26,11 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(Long id, int seatCount, double totalCost, Movie movie, User user) {
+    public Booking(Long id, int seatCount, double totalCost, String selectedSeats, Movie movie, User user) {
         this.id = id;
         this.seatCount = seatCount;
         this.totalCost = totalCost;
+        this.selectedSeats = selectedSeats;
         this.movie = movie;
         this.user = user;
     }
@@ -55,6 +57,14 @@ public class Booking {
 
     public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public String getSelectedSeats() {
+        return selectedSeats;
+    }
+
+    public void setSelectedSeats(String selectedSeats) {
+        this.selectedSeats = selectedSeats;
     }
 
     public Movie getMovie() {

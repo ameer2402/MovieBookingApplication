@@ -1,0 +1,58 @@
+.bookings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .error-message {
+    background-color: #ffdddd;
+    color: #ff0000;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .no-bookings {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+  
+  .bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .booking-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-details {
+    color: #34495e;
+  }
+  
+  .booking-details h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .booking-details p {
+    margin: 5px 0;
+  }

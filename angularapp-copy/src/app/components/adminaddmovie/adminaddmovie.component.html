@@ -1,88 +1,212 @@
-<div class="container">
-    <div class="movie-form-container">
-      <h2>{{ isEditing ? 'Edit Movie' : 'Add New Movie' }}</h2>
-      
-      <form (ngSubmit)="addOrUpdateMovie()" #movieForm="ngForm">
-        <div class="form-group">
-          <label for="title">Movie Title</label>
-          <input 
-            type="text" 
-            id="title" 
-            name="title" 
-            [(ngModel)]="movie.title" 
-            required 
-            class="form-control"
-          >
+<main class="pt-32 pb-20 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto min-h-screen">
+<!-- Page Header -->
+<div class="mb-stack-lg animate-fade-in">
+<div class="flex items-center gap-2 text-primary-container mb-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard_customize</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Management Suite</span>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">{{ isEditing ? 'Edit Movie' : 'Add New Movie' }}</h2>
+<p class="text-on-surface-variant font-body-lg max-w-2xl">Initialize a new theatrical entry into the prestige catalog. Ensure all metadata and media assets meet the high-fidelity standards of the theater experience.</p>
+
+<div *ngIf="errorMessage" class="mt-4 p-4 bg-error/20 border border-error/50 rounded-lg flex items-center gap-2 text-error font-bold shadow-lg animate-fade-in">
+    <span class="material-symbols-outlined">warning</span>
+    {{ errorMessage }}
+</div>
+</div>
+
+<!-- Form Layout -->
+<form (ngSubmit)="addOrUpdateMovie()" #movieForm="ngForm" class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Primary Data -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+    <!-- Basic Info Card -->
+    <div class="glass-panel p-8 rounded-xl flex flex-col gap-stack-md">
+        <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-2">
+        <span class="material-symbols-outlined text-primary">info</span>
+        <h3 class="font-headline-md text-headline-md">Core Information</h3>
         </div>
         
-        <div class="form-group">
-          <label for="duration">Duration (minutes)</label>
-          <input 
-            type="number" 
-            id="duration" 
-            name="duration" 
-            [(ngModel)]="movie.duration" 
-            required 
-            class="form-control"
-          >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Movie Title</label>
+        <input [(ngModel)]="movie.title" name="title" required class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface placeholder:opacity-30 bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0" placeholder="e.g. The Neon Sovereign" type="text"/>
+        </div>
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Genre</label>
+        <select [(ngModel)]="movie.genre" name="genre" required class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0">
+            <option value="" disabled selected>Select a Genre</option>
+            <option value="Action">Action</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Drama">Drama</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Horror">Horror</option>
+            <option value="Romance">Romance</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Thriller">Thriller</option>
+        </select>
+        </div>
         </div>
         
-        <div class="form-group">
-          <label for="genre">Genre</label>
-          <input 
-            type="text" 
-            id="genre" 
-            name="genre" 
-            [(ngModel)]="movie.genre" 
-            required 
-            class="form-control"
-          >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Show Date</label>
+        <input [(ngModel)]="movie.showDate" name="showDate" required class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0" type="date"/>
+        </div>
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Show Time</label>
+        <select [(ngModel)]="movie.showTime" name="showTime" required class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0">
+            <option value="" disabled selected>Select a Show Time</option>
+            <option value="09:00">09:00 AM (Morning Show)</option>
+            <option value="11:30">11:30 AM (Matinee)</option>
+            <option value="14:00">02:00 PM (Afternoon)</option>
+            <option value="16:30">04:30 PM (Evening)</option>
+            <option value="19:00">07:00 PM (Prime Time)</option>
+            <option value="21:30">09:30 PM (Night Show)</option>
+            <option value="23:45">11:45 PM (Midnight)</option>
+        </select>
+        </div>
         </div>
         
-        <div class="form-group">
-          <label for="price">Ticket Price</label>
-          <input 
-            type="number" 
-            id="price" 
-            name="price" 
-            [(ngModel)]="movie.price" 
-            required 
-            class="form-control"
-          >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md mt-4">
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Language</label>
+        <select [(ngModel)]="movie.language" name="language" required class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0">
+            <option value="" disabled selected>Select Language</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Malayalam">Malayalam</option>
+            <option value="Kannada">Kannada</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Korean">Korean</option>
+            <option value="Japanese">Japanese</option>
+        </select>
+        </div>
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Duration (Min)</label>
+        <input [(ngModel)]="movie.duration" name="duration" required class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0" placeholder="120" type="number"/>
+        </div>
         </div>
         
-        <div class="form-group">
-          <label for="totalSeats">Total Seats</label>
-          <input 
-            type="number" 
-            id="totalSeats" 
-            name="totalSeats" 
-            [(ngModel)]="movie.totalSeats" 
-            required 
-            class="form-control"
-          >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md mt-4">
+        <div class="flex flex-col gap-2">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Seats Capacity</label>
+        <input [(ngModel)]="movie.totalSeats" name="totalSeats" disabled class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface opacity-50 bg-[#1A1A1A] border-b-2 border-transparent" type="number"/>
+        <span class="text-xs text-on-surface-variant">Auto-calculated from selected screen.</span>
         </div>
-        
-        <div *ngIf="errorMessage" class="error-message">
-          {{ errorMessage }}
         </div>
-        
-        <div class="form-actions">
-          <button 
-            type="submit" 
-            [disabled]="!movieForm.form.valid" 
-            class="btn btn-primary"
-          >
-            {{ isEditing ? 'Update Movie' : 'Add Movie' }}
-          </button>
-          <button 
-            type="button" 
-            class="btn btn-secondary" 
-            (click)="cancelOperation()"
-          >
-            Cancel
-          </button>
+    </div> <!-- Close Basic Info Card -->
+
+    <!-- Screen & Pricing Configuration Card -->
+    <div class="glass-panel p-8 rounded-xl flex flex-col gap-stack-md mt-gutter">
+        <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-2">
+        <span class="material-symbols-outlined text-primary">meeting_room</span>
+        <h3 class="font-headline-md text-headline-md">Screen & Seat Reservation</h3>
         </div>
-      </form>
-    </div>
-  </div>
+
+        <div class="flex flex-col gap-2 mb-4">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Select Theatre Screen</label>
+        <select [(ngModel)]="selectedScreenId" (change)="onScreenChange()" name="selectedScreen" class="input-dark w-full px-4 py-3 rounded-t-lg text-on-surface bg-[#1A1A1A] border-b-2 border-transparent focus:border-primary-container focus:ring-0">
+        <option *ngFor="let screen of screens" [value]="screen.id">{{ screen.name }} ({{ screen.rows * screen.cols }} seats)</option>
+        </select>
+        <p *ngIf="screens.length === 0" class="text-error text-xs">No screens available. Please configure screens in the Layout Configurator first.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md mb-4">
+        <div class="flex flex-col gap-1">
+        <label class="text-xs text-on-surface-variant uppercase tracking-wider">Standard Ticket Price</label>
+        <div class="relative">
+        <span class="absolute left-3 top-3 text-on-surface-variant">₹</span>
+        <input [(ngModel)]="categoryPrices.standard" name="standardPrice" type="number" class="w-full pl-8 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-on-surface focus:border-primary">
+        </div>
+        </div>
+        <div class="flex flex-col gap-1">
+        <label class="text-xs text-primary-container uppercase tracking-wider">VIP Ticket Price</label>
+        <div class="relative">
+        <span class="absolute left-3 top-3 text-on-surface-variant">₹</span>
+        <input [(ngModel)]="categoryPrices.vip" name="vipPrice" type="number" class="w-full pl-8 pr-3 py-2 bg-primary-container/10 border border-primary-container/30 rounded-lg text-on-surface focus:border-primary-container">
+        </div>
+        </div>
+        <div class="flex flex-col gap-1">
+        <label class="text-xs text-secondary uppercase tracking-wider">Platinum Ticket Price</label>
+        <div class="relative">
+        <span class="absolute left-3 top-3 text-on-surface-variant">₹</span>
+        <input [(ngModel)]="categoryPrices.platinum" name="platinumPrice" type="number" class="w-full pl-8 pr-3 py-2 bg-secondary/10 border border-secondary/30 rounded-lg text-on-surface focus:border-secondary">
+        </div>
+        </div>
+        </div>
+
+        <div *ngIf="getScreenById(selectedScreenId) as screen" class="mt-4">
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Reserve/Block Seats (Click to toggle)</label>
+        <div class="bg-black/40 p-4 rounded-lg overflow-x-auto">
+        <div class="flex flex-col items-center gap-1 min-w-max">
+            <div class="w-2/3 h-1 bg-tertiary-container/50 mb-4 rounded-full shadow-[0_0_10px_rgba(0,114,215,0.5)]"></div>
+            <div *ngFor="let row of screen.grid; let r = index" class="flex gap-1 justify-center">
+                <div *ngFor="let type of row; let c = index" 
+                     (click)="toggleSeatBlock(r, c)"
+                     class="w-6 h-6 flex-none rounded-sm cursor-pointer transition-transform flex items-center justify-center text-[8px] text-white/30 border"
+                     [ngClass]="{
+                         'border-outline-variant bg-transparent': type === 'standard' && !isSeatBlocked(r, c),
+                         'border-primary-container bg-primary-container/20': type === 'vip' && !isSeatBlocked(r, c),
+                         'border-secondary bg-secondary/20 shadow-[0_0_10px_rgba(71,250,243,0.3)]': type === 'platinum' && !isSeatBlocked(r, c),
+                         'border-error bg-error/40': isSeatBlocked(r, c)
+                     }">
+                     <span *ngIf="isSeatBlocked(r, c)" class="material-symbols-outlined text-[12px] text-white">block</span>
+                     <span *ngIf="!isSeatBlocked(r, c)">{{ r }}{{ c }}</span>
+                </div>
+            </div>
+        </div>
+        </div>
+        <p class="text-xs text-on-surface-variant mt-2">Blocked seats will not be available for users to book.</p>
+        </div>
+    </div> <!-- Close Screen Config Card -->
+</div> <!-- Close Left Column -->
+
+<!-- Right Column: Visual Assets -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Poster Upload Panel -->
+<div class="glass-panel p-8 rounded-xl flex flex-col gap-stack-md">
+<div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-2">
+<span class="material-symbols-outlined text-primary">image</span>
+<h3 class="font-headline-md text-headline-md">Poster Art</h3>
+</div>
+<div class="relative aspect-[2/3] w-full bg-surface-container-highest rounded-lg overflow-hidden border-2 border-dashed border-white/10 group cursor-pointer hover:border-primary-container transition-all" (click)="fileInput.click()">
+<input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden">
+<div *ngIf="!posterBase64" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-on-surface-variant group-hover:text-primary transition-colors z-10 bg-black/40">
+<span class="material-symbols-outlined text-4xl">cloud_upload</span>
+<span class="font-label-lg">CLICK TO UPLOAD POSTER</span>
+<span class="text-xs opacity-50">2:3 Aspect Ratio Recommended</span>
+</div>
+<img class="w-full h-full object-cover transition-opacity" 
+     [ngClass]="posterBase64 ? 'opacity-100' : 'opacity-20 group-hover:opacity-40'"
+     [src]="posterBase64 ? posterBase64 : (movie.title ? 'https://image.pollinations.ai/prompt/movie%20poster%20for%20' + movie.title + '?width=400&height=600&nologo=true' : 'https://via.placeholder.com/400x600?text=Poster')"/>
+</div>
+</div>
+<!-- Submission Controls -->
+<div class="glass-panel p-8 rounded-xl flex flex-col gap-stack-md sticky top-28">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-label-md uppercase tracking-wider">Status</span>
+<span class="px-2 py-1 bg-surface-variant text-[10px] font-bold rounded uppercase">Draft Mode</span>
+</div>
+<div class="h-px bg-white/10"></div>
+<p class="text-xs text-on-surface-variant leading-relaxed">By publishing, this movie will immediately become visible across the CINEPRESTIGE global cinema network and mobile apps.</p>
+</div>
+<div class="flex flex-col gap-stack-sm">
+<button [disabled]="!movieForm.form.valid" class="w-full py-4 bg-primary-container disabled:opacity-50 hover:brightness-110 text-white rounded-lg font-headline-sm transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined">publish</span>
+                            {{ isEditing ? 'Update Movie' : 'Publish Movie' }}
+                        </button>
+</div>
+<div class="flex justify-center">
+<button (click)="cancelOperation()" class="text-on-surface-variant hover:text-error transition-colors font-label-md flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">cancel</span>
+                            Cancel
+                        </button>
+</div>
+<div *ngIf="errorMessage" class="text-error text-center mt-2 font-bold">{{ errorMessage }}</div>
+</div>
+</div>
+</form>
+</main>
