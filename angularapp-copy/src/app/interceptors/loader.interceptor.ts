@@ -15,7 +15,18 @@ export class LoaderInterceptor implements HttpInterceptor {
   constructor(private loaderService: LoaderService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.loaderService.show();
+    let context = 'DEFAULT';
+    const url = request.url.toLowerCase();
+
+    if (url.includes('/login') || url.includes('/register') || url.includes('/authenticate')) {
+      context = 'AUTH';
+    } else if (url.includes('/api/movie')) {
+      context = 'MOVIE';
+    } else if (url.includes('/api/booking')) {
+      context = 'TICKET';
+    }
+
+    this.loaderService.show(context);
 
     return next.handle(request).pipe(
       finalize(() => {

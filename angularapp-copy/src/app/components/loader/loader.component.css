@@ -65,3 +65,14 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+.ticket-spinner, .popcorn-spinner {
+  color: var(--accent-gold);
+  filter: drop-shadow(0 0 5px var(--accent-gold));
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
