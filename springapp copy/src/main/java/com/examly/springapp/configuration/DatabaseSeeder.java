@@ -86,36 +86,16 @@ public class DatabaseSeeder implements CommandLineRunner {
             movieRepo.save(new Movie(0L, "RRR", 187, "Action, Drama, Epic", 350, 120, 
                 "2026-11-01", "21:00", 4.9, 25000, "Telugu, Hindi, Tamil", "S2", 
                 "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/d/d7/RRR_Poster.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Kalki 2898 AD", 180, "Sci-Fi, Mythological", 400, 250, 
-                "2026-11-02", "11:30", 4.7, 18000, "Telugu, Hindi", "S3", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/2/22/Kalki_2898_AD_poster.jpg", "", ""));
             movieRepo.save(new Movie(0L, "Bahubali: The Beginning", 159, "Action, Epic", 250, 250, 
                 "2026-11-03", "15:30", 4.8, 30000, "Telugu, Hindi", "S3", 
                 "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BODAwMDc0NzA3Ml5BMl5BanBnXkFtZTgwMjU4NzgyNzE@._V1_SY500_CR0,0,353,500_AL_.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Pushpa: The Rise", 179, "Action, Drama", 300, 250, 
-                "2026-11-04", "18:00", 4.8, 22000, "Telugu, Hindi, Malayalam", "S3", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/1/11/Pushpa_The_Rise.jpeg", "", ""));
-            movieRepo.save(new Movie(0L, "Salaar: Part 1 - Ceasefire", 175, "Action, Thriller", 350, 300, 
-                "2026-11-05", "21:00", 4.7, 24000, "Telugu, Hindi, Kannada", "S4", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/2/22/Salaar_Part_1_%E2%80%93_Ceasefire.jpg", "", ""));
-
             // Tamil Movies
-            movieRepo.save(new Movie(0L, "Vikram", 173, "Action, Thriller", 300, 300, 
-                "2026-12-10", "14:00", 4.8, 19500, "Tamil, Hindi, Telugu", "S4", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/8/8b/Vikram_2022_poster.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Leo", 164, "Action, Crime", 350, 300, 
-                "2026-12-11", "18:00", 4.7, 22000, "Tamil, Hindi, Telugu", "S4", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/0/07/Leo_poster.jpg", "", ""));
             movieRepo.save(new Movie(0L, "Jailer", 168, "Action, Comedy", 250, 150, 
                 "2026-12-12", "21:00", 4.8, 20000, "Tamil, Telugu", "S5", 
                 "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/c/cb/Jailer_2023_Tamil_film_poster.jpg", "", ""));
             movieRepo.save(new Movie(0L, "Master", 179, "Action, Thriller", 300, 150, 
                 "2026-12-13", "10:30", 4.7, 18000, "Tamil, Telugu", "S5", 
                 "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/5/53/Master_2021_poster.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Ponniyin Selvan: I", 167, "Action, Adventure, Drama", 350, 80, 
-                "2026-12-14", "14:00", 4.8, 21000, "Tamil, Hindi, Telugu", "S6", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/4/41/Ponniyin_Selvan_I_poster.jpg", "", ""));
-
             // Kannada Movies
             movieRepo.save(new Movie(0L, "K.G.F: Chapter 2", 168, "Action, Crime", 350, 150, 
                 "2026-12-15", "18:00", 4.9, 28000, "Kannada, Hindi, Telugu", "S5", 
@@ -125,24 +105,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/8/84/Kantara_poster.jpeg", "", ""));
 
             // Malayalam Movies
-            movieRepo.save(new Movie(0L, "Premam", 156, "Romance, Comedy", 150, 80, 
-                "2026-12-20", "10:30", 4.9, 12000, "Malayalam", "S6", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/9/90/Premam_poster.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Manjummel Boys", 135, "Adventure, Thriller", 200, 200, 
-                "2026-12-21", "14:00", 4.8, 16000, "Malayalam", "S7", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/0/09/Manjummel_Boys_poster.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Kumbalangi Nights", 135, "Drama, Comedy", 150, 200, 
-                "2026-12-22", "18:00", 4.8, 14000, "Malayalam", "S7", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/1/1e/Kumbalangi_Nights_poster.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Drishyam", 160, "Crime, Drama, Thriller", 250, 200, 
-                "2026-12-23", "21:00", 4.9, 17000, "Malayalam", "S7", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/3/33/Drishyam_Poster.jpg", "", ""));
-
             // Bengali Movies
-            movieRepo.save(new Movie(0L, "Aparajito", 138, "Biography, Drama", 150, 200, 
-                "2026-12-25", "10:30", 4.7, 5000, "Bengali", "S7", 
-                "https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/en/b/ba/Aparajito_poster.jpg", "", ""));
-
             // English (Hollywood in India)
             movieRepo.save(new Movie(0L, "Avengers: Endgame", 181, "Action, Adventure, Sci-Fi", 450, 250, 
                 "2026-12-26", "14:00", 4.9, 45000, "English, Hindi", "S3", 
@@ -153,9 +116,6 @@ public class DatabaseSeeder implements CommandLineRunner {
             movieRepo.save(new Movie(0L, "Dangal", 161, "Action", 255, 217, 
                 "2027-01-01", "14:00", 4.3, 24770, "Hindi, Tamil, Telugu", "S1", 
                 "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ4MzQzMzM2Nl5BMl5BanBnXkFtZTgwMTQ1NzU3MDI@._V1_SY500_CR0,0,356,500_AL_.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Drishyam", 160, "Crime", 256, 214, 
-                "2027-01-02", "14:00", 4.2, 10541, "Hindi, Tamil, Telugu", "S2", 
-                "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BYmY3MzYwMGUtOWMxYS00OGVhLWFjNmUtYzlkNGVmY2ZkMjA3XkEyXkFqcGdeQXVyMTExNDQ2MTI@._V1_SX330_CR0,0,330,432_AL_.jpg", "", ""));
             movieRepo.save(new Movie(0L, "Gol Maal", 144, "Comedy", 190, 102, 
                 "2027-01-03", "14:00", 4.0, 5037, "Hindi, Tamil, Telugu", "S3", 
                 "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BMjA4OTczODgxNF5BMl5BanBnXkFtZTgwMDAzMTU2NDE@._V1_SY250_CR0,0,187,250_AL_.jpg", "", ""));
@@ -168,9 +128,6 @@ public class DatabaseSeeder implements CommandLineRunner {
             movieRepo.save(new Movie(0L, "A Wednesday", 104, "Crime", 316, 244, 
                 "2027-01-06", "14:00", 3.9, 21340, "Hindi, Tamil, Telugu", "S6", 
                 "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BMTAzODEzMjE1MTJeQTJeQWpwZ15BbWU3MDE3NjQ5Mzk@._V1_SY492_SX324_AL_.jpg", "", ""));
-            movieRepo.save(new Movie(0L, "Drishyam", 163, "Crime", 318, 155, 
-                "2027-01-07", "18:00", 3.9, 5310, "Hindi, Tamil, Telugu", "S7", 
-                "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BMTYyMjgyNDY3N15BMl5BanBnXkFtZTgwOTMzNTE5NTE@._V1_SY500_CR0,0,346,500_AL_.jpg", "", ""));
             movieRepo.save(new Movie(0L, "Talvar", 132, "Biography", 207, 185, 
                 "2027-01-08", "14:00", 4.2, 13898, "Hindi, Tamil, Telugu", "S1", 
                 "https://wsrv.nl/?url=https://images-na.ssl-images-amazon.com/images/M/MV5BMTYzODg0Mjc4M15BMl5BanBnXkFtZTgwNzY4Mzc3NjE@._V1_SX369_CR0,0,369,499_AL_.jpg", "", ""));
