@@ -11,6 +11,7 @@ com/examly/springapp/configuration/SecurityConfig.class
 com/examly/springapp/exception/ResourceNotFoundException.class
 com/examly/springapp/controller/BookingController.class
 com/examly/springapp/configuration/JwtUtils.class
+com/examly/springapp/configuration/DatabaseSeeder.class
 com/examly/springapp/repository/TheatreRepo.class
 com/examly/springapp/repository/BookingRepo.class
 com/examly/springapp/entity/ScreenConfig.class

@@ -18,6 +18,7 @@
 /Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/repository/UserRepo.java
 /Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/repository/BookingRepo.java
 /Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/entity/Movie.java
+/Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/configuration/DatabaseSeeder.java
 /Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/exception/GlobalExceptionHandler.java
 /Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/entity/User.java
 /Users/ameerkhan/MovieBookingApplication/springapp copy/src/main/java/com/examly/springapp/entity/ScreenConfig.java
