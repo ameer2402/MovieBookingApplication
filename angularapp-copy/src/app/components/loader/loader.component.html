@@ -1,7 +1,18 @@
 <div class="loader-container" *ngIf="loaderService.isLoading | async">
   <div class="glow-bar"></div>
   <div class="spinner-container">
-    <div class="cinematic-spinner"></div>
-    <span class="loading-text">SYNCING DATA...</span>
+    <svg class="film-reel-spinner" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <circle cx="12" cy="12" r="2"></circle>
+      <line x1="12" y1="2" x2="12" y2="4"></line>
+      <line x1="12" y1="20" x2="12" y2="22"></line>
+      <line x1="22" y1="12" x2="20" y2="12"></line>
+      <line x1="4" y1="12" x2="2" y2="12"></line>
+      <line x1="19.07" y1="4.93" x2="17.66" y2="6.34"></line>
+      <line x1="6.34" y1="17.66" x2="4.93" y2="19.07"></line>
+      <line x1="19.07" y1="19.07" x2="17.66" y2="17.66"></line>
+      <line x1="6.34" y1="6.34" x2="4.93" y2="4.93"></line>
+    </svg>
+    <span class="loading-text">PREPARING CINEMA...</span>
   </div>
 </div>

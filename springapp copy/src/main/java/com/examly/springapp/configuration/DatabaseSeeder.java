@@ -34,39 +34,60 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Seed Users
+        // 1. Seed Users (Admins and Users)
         if (userRepo.count() == 0) {
-            User admin = new User(0, "admin@test.com", passwordEncoder.encode("admin123"), "admin", "1234567890", "ADMIN");
-            userRepo.save(admin);
+            User superAdmin = new User(null, "superadmin@test.com", passwordEncoder.encode("admin123"), "Super Admin", "9876543210", "ADMIN");
+            userRepo.save(superAdmin);
             
-            User user = new User(0, "user@test.com", passwordEncoder.encode("user123"), "user", "0987654321", "USER");
-            userRepo.save(user);
+            User theatreAdmin = new User(null, "pvr_admin@test.com", passwordEncoder.encode("admin123"), "PVR Admin", "9876543211", "ADMIN");
+            userRepo.save(theatreAdmin);
+            
+            User standardUser = new User(null, "user@test.com", passwordEncoder.encode("user123"), "Standard User", "0987654321", "USER");
+            userRepo.save(standardUser);
         }
 
-        // Seed Theatre
+        // 2. Seed Theatres (Indian Premium Cinemas)
         if (theatreRepo.count() == 0) {
-            Theatre theatre = new Theatre("T1", "CinePrestige Flagship", "New York");
-            theatreRepo.save(theatre);
+            theatreRepo.save(new Theatre("T1", "PVR ICON Palladium", "Mumbai, Maharashtra"));
+            theatreRepo.save(new Theatre("T2", "INOX Laserplex Nehru Place", "New Delhi, Delhi"));
+            theatreRepo.save(new Theatre("T3", "Prasads IMAX", "Hyderabad, Telangana"));
         }
 
-        // Seed Screen
+        // 3. Seed Screens
         if (screenConfigRepo.count() == 0) {
-            ScreenConfig screen = new ScreenConfig("S1", "T1", "IMAX Screen 1", "IMAX", 100, "");
-            screenConfigRepo.save(screen);
+            screenConfigRepo.save(new ScreenConfig("S1", "T1", "PVR Gold Class - Screen 1", "Gold", 100, ""));
+            screenConfigRepo.save(new ScreenConfig("S2", "T2", "INOX Insignia - Screen 2", "Insignia", 120, ""));
+            screenConfigRepo.save(new ScreenConfig("S3", "T3", "Prasads PCX - Screen 3", "IMAX", 250, ""));
         }
 
-        // Seed Movies
+        // 4. Seed Movies
         if (movieRepo.count() == 0) {
-            Movie movie1 = new Movie(0, "Inception", 148, "Sci-Fi, Action", 15, 100, 
-                "2026-06-01", "18:00", 4.8, 1000, "EN", "S1", 
-                "https://image.tmdb.org/t/p/w500/9gk7adZA2822eVXgeORNWiWGc3Z.jpg", "", "");
+            // Screen 1 Movies (PVR ICON)
+            movieRepo.save(new Movie(null, "Kalki 2898 AD", 180, "Sci-Fi, Action, Mythological", 350, 100, 
+                "2026-10-15", "10:30", 4.7, 5200, "Telugu, Hindi", "S1", 
+                "https://image.tmdb.org/t/p/w500/x5Zq10LUBXqjV2h6r7hP86l332y.jpg", "", ""));
                 
-            Movie movie2 = new Movie(0, "The Dark Knight", 152, "Action, Crime", 15, 100, 
-                "2026-06-02", "20:00", 4.9, 2000, "EN", "S1", 
-                "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg", "", "");
+            movieRepo.save(new Movie(null, "Jawan", 169, "Action, Thriller", 300, 100, 
+                "2026-10-16", "14:00", 4.8, 12500, "Hindi, Tamil", "S1", 
+                "https://image.tmdb.org/t/p/w500/jILeVkOBEXGUHQIGFAvcFxpzZqT.jpg", "", ""));
+
+            // Screen 2 Movies (INOX Laserplex)
+            movieRepo.save(new Movie(null, "Oppenheimer", 180, "Biography, Drama", 400, 120, 
+                "2026-11-01", "18:00", 4.9, 8500, "English", "S2", 
+                "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", "", ""));
                 
-            movieRepo.save(movie1);
-            movieRepo.save(movie2);
+            movieRepo.save(new Movie(null, "RRR", 187, "Action, Drama, Epic", 350, 120, 
+                "2026-11-02", "21:00", 4.9, 15000, "Telugu, Hindi, Tamil", "S2", 
+                "https://image.tmdb.org/t/p/w500/nEufeZlyAOLqO2brrs0yeF1lgHO.jpg", "", ""));
+
+            // Screen 3 Movies (Prasads IMAX)
+            movieRepo.save(new Movie(null, "Interstellar", 169, "Sci-Fi, Adventure", 250, 250, 
+                "2026-12-10", "11:30", 4.9, 21000, "English", "S3", 
+                "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MvrIdZ21.jpg", "", ""));
+                
+            movieRepo.save(new Movie(null, "Bahubali: The Conclusion", 167, "Action, Drama", 200, 250, 
+                "2026-12-11", "15:30", 4.8, 18500, "Telugu, Hindi", "S3", 
+                "https://image.tmdb.org/t/p/w500/91wsQcuwXJb2jM3Zc6xN4s80U8w.jpg", "", ""));
         }
     }
 }
