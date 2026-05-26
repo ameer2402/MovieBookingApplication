@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotBlank(message = "Movie title is required")
     private String title;

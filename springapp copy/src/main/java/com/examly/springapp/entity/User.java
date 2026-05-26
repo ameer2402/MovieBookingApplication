@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "app_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     @Column(unique = true)
     @NotBlank(message = "Email is required")
