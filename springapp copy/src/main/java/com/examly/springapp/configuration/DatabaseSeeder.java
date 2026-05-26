@@ -36,13 +36,13 @@ public class DatabaseSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // 1. Seed Users (Admins and Users)
         if (userRepo.count() == 0) {
-            User superAdmin = new User(null, "superadmin@test.com", passwordEncoder.encode("admin123"), "Super Admin", "9876543210", "ADMIN");
+            User superAdmin = new User(0, "superadmin@test.com", passwordEncoder.encode("admin123"), "Super Admin", "9876543210", "ADMIN");
             userRepo.save(superAdmin);
             
-            User theatreAdmin = new User(null, "pvr_admin@test.com", passwordEncoder.encode("admin123"), "PVR Admin", "9876543211", "ADMIN");
+            User theatreAdmin = new User(0, "pvr_admin@test.com", passwordEncoder.encode("admin123"), "PVR Admin", "9876543211", "ADMIN");
             userRepo.save(theatreAdmin);
             
-            User standardUser = new User(null, "user@test.com", passwordEncoder.encode("user123"), "Standard User", "0987654321", "USER");
+            User standardUser = new User(0, "user@test.com", passwordEncoder.encode("user123"), "Standard User", "0987654321", "USER");
             userRepo.save(standardUser);
         }
 
@@ -63,29 +63,29 @@ public class DatabaseSeeder implements CommandLineRunner {
         // 4. Seed Movies
         if (movieRepo.count() == 0) {
             // Screen 1 Movies (PVR ICON)
-            movieRepo.save(new Movie(null, "Kalki 2898 AD", 180, "Sci-Fi, Action, Mythological", 350, 100, 
+            movieRepo.save(new Movie(0L, "Kalki 2898 AD", 180, "Sci-Fi, Action, Mythological", 350, 100, 
                 "2026-10-15", "10:30", 4.7, 5200, "Telugu, Hindi", "S1", 
                 "https://image.tmdb.org/t/p/w500/x5Zq10LUBXqjV2h6r7hP86l332y.jpg", "", ""));
                 
-            movieRepo.save(new Movie(null, "Jawan", 169, "Action, Thriller", 300, 100, 
+            movieRepo.save(new Movie(0L, "Jawan", 169, "Action, Thriller", 300, 100, 
                 "2026-10-16", "14:00", 4.8, 12500, "Hindi, Tamil", "S1", 
                 "https://image.tmdb.org/t/p/w500/jILeVkOBEXGUHQIGFAvcFxpzZqT.jpg", "", ""));
 
             // Screen 2 Movies (INOX Laserplex)
-            movieRepo.save(new Movie(null, "Oppenheimer", 180, "Biography, Drama", 400, 120, 
+            movieRepo.save(new Movie(0L, "Oppenheimer", 180, "Biography, Drama", 400, 120, 
                 "2026-11-01", "18:00", 4.9, 8500, "English", "S2", 
                 "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", "", ""));
                 
-            movieRepo.save(new Movie(null, "RRR", 187, "Action, Drama, Epic", 350, 120, 
+            movieRepo.save(new Movie(0L, "RRR", 187, "Action, Drama, Epic", 350, 120, 
                 "2026-11-02", "21:00", 4.9, 15000, "Telugu, Hindi, Tamil", "S2", 
                 "https://image.tmdb.org/t/p/w500/nEufeZlyAOLqO2brrs0yeF1lgHO.jpg", "", ""));
 
             // Screen 3 Movies (Prasads IMAX)
-            movieRepo.save(new Movie(null, "Interstellar", 169, "Sci-Fi, Adventure", 250, 250, 
+            movieRepo.save(new Movie(0L, "Interstellar", 169, "Sci-Fi, Adventure", 250, 250, 
                 "2026-12-10", "11:30", 4.9, 21000, "English", "S3", 
                 "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MvrIdZ21.jpg", "", ""));
                 
-            movieRepo.save(new Movie(null, "Bahubali: The Conclusion", 167, "Action, Drama", 200, 250, 
+            movieRepo.save(new Movie(0L, "Bahubali: The Conclusion", 167, "Action, Drama", 200, 250, 
                 "2026-12-11", "15:30", 4.8, 18500, "Telugu, Hindi", "S3", 
                 "https://image.tmdb.org/t/p/w500/91wsQcuwXJb2jM3Zc6xN4s80U8w.jpg", "", ""));
         }
