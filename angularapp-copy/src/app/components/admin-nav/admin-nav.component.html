@@ -1,10 +1,25 @@
-<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/view/Movies">Manage Movies</a>
-<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/add/newMovies">Add Movies</a>
-<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/view/AllBookings">Dashboard</a>
-<a class="text-on-surface-variant font-medium hover:text-primary transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-primary !border-primary !bg-primary/10 md:!bg-transparent" routerLink="/admin/theatre-config">Screen Manager</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-primary transition-all duration-300 md:text-sm text-lg md:border-b-2 border-transparent pb-0 md:pb-1 w-full md:w-auto px-4 md:px-0 py-4 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-xl md:rounded-none" routerLinkActive="!text-primary md:!border-primary !bg-primary/10 md:!bg-transparent font-bold md:font-medium" routerLink="/admin/view/Movies">
+    <span class="material-symbols-outlined block md:hidden">movie_edit</span>
+    <span>Manage Movies</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-primary transition-all duration-300 md:text-sm text-lg md:border-b-2 border-transparent pb-0 md:pb-1 w-full md:w-auto px-4 md:px-0 py-4 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-xl md:rounded-none" routerLinkActive="!text-primary md:!border-primary !bg-primary/10 md:!bg-transparent font-bold md:font-medium" routerLink="/admin/add/newMovies">
+    <span class="material-symbols-outlined block md:hidden">add_circle</span>
+    <span>Add Movies</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-primary transition-all duration-300 md:text-sm text-lg md:border-b-2 border-transparent pb-0 md:pb-1 w-full md:w-auto px-4 md:px-0 py-4 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-xl md:rounded-none" routerLinkActive="!text-primary md:!border-primary !bg-primary/10 md:!bg-transparent font-bold md:font-medium" routerLink="/admin/view/AllBookings">
+    <span class="material-symbols-outlined block md:hidden">dashboard</span>
+    <span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-primary transition-all duration-300 md:text-sm text-lg md:border-b-2 border-transparent pb-0 md:pb-1 w-full md:w-auto px-4 md:px-0 py-4 md:py-0 hover:bg-white/5 md:hover:bg-transparent rounded-xl md:rounded-none" routerLinkActive="!text-primary md:!border-primary !bg-primary/10 md:!bg-transparent font-bold md:font-medium" routerLink="/admin/theatre-config">
+    <span class="material-symbols-outlined block md:hidden">chair</span>
+    <span>Screen Manager</span>
+</a>
 
 <ng-container *ngIf="isSuperAdmin">
     <div class="w-px h-6 bg-white/20 hidden md:block"></div>
-    <div class="h-px w-full bg-white/10 block md:hidden my-2"></div>
-    <a class="text-secondary font-medium hover:text-secondary-container transition-all duration-300 font-headline-sm text-sm border-b-2 border-transparent pb-1 w-full md:w-auto px-4 md:px-0 py-2 md:py-0 hover:bg-secondary/5 md:hover:bg-transparent rounded-lg md:rounded-none" routerLinkActive="!text-secondary !border-secondary !bg-secondary/10 md:!bg-transparent" routerLink="/admin/add/owner">Add Theatre Owner</a>
+    <div class="h-px w-full bg-white/5 block md:hidden my-2"></div>
+    <a class="flex items-center gap-4 text-secondary hover:text-secondary-container transition-all duration-300 md:text-sm text-lg md:border-b-2 border-transparent pb-0 md:pb-1 w-full md:w-auto px-4 md:px-0 py-4 md:py-0 hover:bg-secondary/10 md:hover:bg-transparent rounded-xl md:rounded-none" routerLinkActive="!text-secondary md:!border-secondary !bg-secondary/20 md:!bg-transparent font-bold md:font-medium" routerLink="/admin/add/owner">
+        <span class="material-symbols-outlined block md:hidden">person_add</span>
+        <span>Add Theatre Owner</span>
+    </a>
 </ng-container>
