@@ -57,18 +57,16 @@ export class UserbookingmovieComponent implements OnInit {
   loadMovieDetails(): void {
     this.movieService.getMovieById(this.movieId).subscribe(
       (data) => {
-        this.movie = data;
-        
         // Parse dynamic pricing and blocked seats from DB model if available
-        if (this.movie.categoryPrices) {
-            this.movieExtras = { categoryPrices: typeof this.movie.categoryPrices === 'string' ? JSON.parse(this.movie.categoryPrices) : this.movie.categoryPrices };
+        if (data.categoryPrices) {
+            this.movieExtras = { categoryPrices: typeof data.categoryPrices === 'string' ? JSON.parse(data.categoryPrices) : data.categoryPrices };
         }
-        if (this.movie.blockedSeats) {
+        if (data.blockedSeats) {
             this.movieExtras = this.movieExtras || {};
-            this.movieExtras.blockedSeats = typeof this.movie.blockedSeats === 'string' ? JSON.parse(this.movie.blockedSeats) : this.movie.blockedSeats;
+            this.movieExtras.blockedSeats = typeof data.blockedSeats === 'string' ? JSON.parse(data.blockedSeats) : data.blockedSeats;
         }
         
-        this.loadScreenAndInitialize();
+        this.loadScreenAndInitialize(data);
       },
       (error) => {
         this.errorMessage = 'Error loading movie details';
@@ -77,20 +75,23 @@ export class UserbookingmovieComponent implements OnInit {
     );
   }
 
-  loadScreenAndInitialize(): void {
-    if (this.movie.selectedScreenId) {
-       this.screenService.getScreenById(this.movie.selectedScreenId).subscribe({
+  loadScreenAndInitialize(movieData: Movie): void {
+    if (movieData.selectedScreenId) {
+       this.screenService.getScreenById(movieData.selectedScreenId).subscribe({
           next: (screen) => {
              this.initializeSeats(screen);
+             this.movie = movieData; // Hide skeleton only after seats are ready
              this.calculateTotalCost();
           },
           error: () => {
              this.initializeSeats(null);
+             this.movie = movieData; // Hide skeleton only after seats are ready
              this.calculateTotalCost();
           }
        });
     } else {
        this.initializeSeats(null);
+       this.movie = movieData; // Hide skeleton only after seats are ready
        this.calculateTotalCost();
     }
   }

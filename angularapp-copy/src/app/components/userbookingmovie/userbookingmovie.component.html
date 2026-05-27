@@ -111,15 +111,16 @@
         <div class="text-center text-label-md font-label-md text-outline-variant mb-2">STANDARD</div>
         <div class="grid grid-cols-10 gap-2 md:gap-3 w-max mx-auto">
           <button 
-            *ngFor="let seat of standardSeats"
+            *ngFor="let seat of standardSeats; let i = index"
             (click)="toggleSeat(seat)"
+            [style.animation-delay.ms]="i * 15"
             [ngClass]="{
               'bg-surface-container-highest opacity-30 cursor-not-allowed': seat.isOccupied,
               'border border-outline hover:border-primary-container hover:bg-primary-container/10': !seat.isOccupied,
               'seat-selected': selectedSeatsSet.has(seat.id)
             }"
             [disabled]="seat.isOccupied"
-            class="w-6 h-6 md:w-8 md:h-8 rounded-sm flex items-center justify-center text-[10px] transition-all duration-200 text-transparent hover:text-white/50">
+            class="seat-pop-in w-6 h-6 md:w-8 md:h-8 rounded-sm flex items-center justify-center text-[10px] transition-all duration-200 text-transparent hover:text-white/50">
             {{ seat.id }}
           </button>
         </div>
@@ -130,15 +131,16 @@
         <div class="text-center text-label-md font-label-md text-secondary mb-2">VIP EXPERIENCE</div>
         <div class="grid grid-cols-12 gap-2 md:gap-3 w-max mx-auto">
           <button 
-            *ngFor="let seat of vipSeats"
+            *ngFor="let seat of vipSeats; let i = index"
             (click)="toggleSeat(seat)"
+            [style.animation-delay.ms]="i * 15"
             [ngClass]="{
               'bg-surface-container-highest opacity-30 cursor-not-allowed': seat.isOccupied,
               'border border-outline hover:border-primary-container hover:bg-primary-container/10': !seat.isOccupied,
               'seat-selected': selectedSeatsSet.has(seat.id)
             }"
             [disabled]="seat.isOccupied"
-            class="w-6 h-6 md:w-8 md:h-8 rounded-sm flex items-center justify-center text-[10px] transition-all duration-200 text-transparent hover:text-white/50">
+            class="seat-pop-in w-6 h-6 md:w-8 md:h-8 rounded-sm flex items-center justify-center text-[10px] transition-all duration-200 text-transparent hover:text-white/50">
             {{ seat.id }}
           </button>
         </div>
@@ -149,15 +151,16 @@
         <div class="text-center text-label-md font-label-md text-tertiary mb-2">PLATINUM RECLINERS</div>
         <div class="grid grid-cols-8 gap-4 md:gap-6 w-max mx-auto">
           <button 
-            *ngFor="let seat of platinumSeats"
+            *ngFor="let seat of platinumSeats; let i = index"
             (click)="toggleSeat(seat)"
+            [style.animation-delay.ms]="i * 15"
             [ngClass]="{
               'bg-surface-container-highest opacity-30 cursor-not-allowed': seat.isOccupied,
               'border-2 border-tertiary-fixed-dim/30 hover:border-primary-container bg-surface-container/50': !seat.isOccupied,
               'seat-selected': selectedSeatsSet.has(seat.id)
             }"
             [disabled]="seat.isOccupied"
-            class="w-8 h-10 md:w-10 md:h-12 rounded-lg flex items-center justify-center transition-all duration-300">
+            class="seat-pop-in w-8 h-10 md:w-10 md:h-12 rounded-lg flex items-center justify-center transition-all duration-300">
             <span class="material-symbols-outlined text-sm" [class.text-white]="selectedSeatsSet.has(seat.id)" [class.text-tertiary-fixed-dim]="!selectedSeatsSet.has(seat.id)">airline_seat_recline_extra</span>
           </button>
         </div>
