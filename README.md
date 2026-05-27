@@ -106,6 +106,39 @@
 
 ---
 
+## 👥 Role Capabilities & Flow
+
+CinePrestige utilizes a strict hierarchy to ensure data integrity and security across the platform.
+
+```mermaid
+graph TD
+    SA[Super Admin] -->|Registers & Grants Privileges| TO[Theatre Owner / Admin]
+    
+    subgraph Admin Portal
+        TO -->|Adds/Manages| T[Theatres]
+        TO -->|Adds/Manages| S[Screens]
+        TO -->|Adds/Manages| M[Movies & Shows]
+        TO -->|Monitors| B_ADMIN[Booking Analytics]
+    end
+
+    subgraph User Portal
+        U[End User] -->|Browses| M_FEED[Cinematic Movie Feed]
+        U -->|Selects Seats & Pays| B_USER[Book Tickets]
+        U -->|Tracks| H[Personal Booking History]
+    end
+```
+
+### 👤 **End User**
+The standard customer account. Users can browse the interactive cinematic feed, filter movies by date/category, view rich metadata via the Quick View modal, dynamically select seats with real-time pricing calculation, and track their personal booking history and digital tickets.
+
+### 🏢 **Theatre Owner (Admin)**
+A management account. These users have access to a secure, protected dashboard. From here, they can manage their specific theatre properties, configure seating capacity for screens, onboard new movies, set dynamic pricing tiers, and monitor all incoming customer bookings.
+
+### 👑 **Super Admin**
+The master system controller. To maintain platform security, Theatre Owners cannot register themselves. The Super Admin securely registers and delegates `THEATRE_OWNER` privileges to verified cinema partners.
+
+---
+
 ## 🏗️ Technical Architecture
 
 ```text
