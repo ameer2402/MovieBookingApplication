@@ -27,6 +27,7 @@ export class UserbookingmovieComponent implements OnInit {
   ticketTotal: number = 0;
   bookingFee: number = 4.50; // Static booking fee per transaction
   
+  isSubmitting: boolean = false;
   errorMessage: string = '';
   
   selectedSeatsSet: Set<string> = new Set<string>();
@@ -229,6 +230,8 @@ export class UserbookingmovieComponent implements OnInit {
       return;
     }
 
+    this.isSubmitting = true;
+
     const booking: Booking = {
       userId: this.userId,
       movieId: this.movieId,
@@ -239,10 +242,12 @@ export class UserbookingmovieComponent implements OnInit {
 
     this.bookingService.addBooking(this.movieId, this.userId, booking).subscribe(
       () => {
+        this.isSubmitting = false;
         this.toastService.showSuccess('Booking Confirmed', 'Your movie tickets have been booked successfully!');
         this.router.navigate(['/user/view/Mybookings']);
       },
       (error) => {
+        this.isSubmitting = false;
         this.toastService.showError('Booking Failed', 'There was an error processing your booking.');
         console.error('Booking error', error);
       }

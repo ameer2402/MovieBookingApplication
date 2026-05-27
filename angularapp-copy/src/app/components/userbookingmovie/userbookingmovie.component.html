@@ -242,9 +242,22 @@
 
       <button 
         (click)="createBooking()"
-        [disabled]="selectedSeatsSet.size === 0"
-        class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-label-lg text-label-lg uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_8px_30px_rgb(229,9,20,0.3)] mt-2 disabled:opacity-50 disabled:cursor-not-allowed">
-        Confirm & Pay
+        [disabled]="selectedSeatsSet.size === 0 || isSubmitting"
+        class="w-full relative flex items-center justify-center overflow-hidden bg-primary-container text-on-primary-container py-4 rounded-xl font-label-lg text-label-lg uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_8px_30px_rgb(229,9,20,0.3)] mt-2 disabled:opacity-50 disabled:cursor-not-allowed group">
+        
+        <!-- Background Transition Effect -->
+        <div class="absolute inset-0 bg-white/20 transform -translate-x-full transition-transform duration-500 ease-out" [ngClass]="{'translate-x-0': isSubmitting}"></div>
+        
+        <!-- Button Content -->
+        <div class="relative flex items-center justify-center gap-3 transition-transform duration-300" [ngClass]="{'scale-95': isSubmitting}">
+           <ng-container *ngIf="!isSubmitting">
+              Confirm & Pay
+           </ng-container>
+           <ng-container *ngIf="isSubmitting">
+              <span class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+              Confirming...
+           </ng-container>
+        </div>
       </button>
 
       <p class="text-center text-on-surface-variant text-[10px] uppercase tracking-tighter opacity-50">
