@@ -150,7 +150,7 @@
       </button>
 
       <div #topCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
-          <div *ngFor="let movie of topRatedMovies" class="flex-none w-64 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+          <div *ngFor="let movie of topRatedMovies; let i = index" class="flex-none w-64 group cursor-pointer snap-start cascade-pop-in" [style.animation-delay.ms]="i * 50" (click)="openQuickView(movie)">
               <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] border border-secondary/20 transition-all duration-300">
                   <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
                   <div class="absolute top-2 right-2 bg-secondary text-on-secondary font-bold px-2 py-1 rounded flex items-center gap-1 text-xs z-10" *ngIf="movie.rating">
@@ -192,7 +192,7 @@
       </button>
 
       <div #genreCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
-          <div *ngFor="let movie of moviesByGenre[genre]" class="flex-none w-48 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+          <div *ngFor="let movie of moviesByGenre[genre]; let i = index" class="flex-none w-48 group cursor-pointer snap-start cascade-pop-in" [style.animation-delay.ms]="i * 50" (click)="openQuickView(movie)">
               <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] transition-all duration-300">
                   <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
                   <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1 z-10" *ngIf="movie.rating">
@@ -235,7 +235,7 @@
       </button>
 
       <div #langCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
-          <div *ngFor="let movie of moviesByLanguage[lang]" class="flex-none w-48 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+          <div *ngFor="let movie of moviesByLanguage[lang]; let i = index" class="flex-none w-48 group cursor-pointer snap-start cascade-pop-in" [style.animation-delay.ms]="i * 50" (click)="openQuickView(movie)">
               <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] transition-all duration-300">
                   <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
                   <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1 z-10" *ngIf="movie.rating">
@@ -274,7 +274,7 @@
          </button>
 
          <div #allCarousel class="horizontal-scroll flex gap-gutter overflow-x-auto pb-stack-md snap-x snap-mandatory scrollbar-hide scroll-smooth">
-             <div *ngFor="let movie of allMovies" class="flex-none w-48 group cursor-pointer snap-start" (click)="openQuickView(movie)">
+             <div *ngFor="let movie of allMovies; let i = index" class="flex-none w-48 group cursor-pointer snap-start cascade-pop-in" [style.animation-delay.ms]="i * 50" (click)="openQuickView(movie)">
                  <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-stack-sm glass-card transform group-hover:scale-[1.03] transition-all duration-300">
                      <img class="w-full h-full object-cover" [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://picsum.photos/seed/' + encodeTitle(movie.title) + '/400/600')"/>
                      <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white font-bold px-2 py-1 rounded text-[10px] border border-white/10 flex items-center gap-1 z-10" *ngIf="movie.rating">
