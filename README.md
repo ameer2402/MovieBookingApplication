@@ -77,7 +77,7 @@
 ### 🔍 2. Quick View Modal
 *Instant metadata retrieval (resolving Theatre and City data synchronously) presented in a stunning pop-in glassmorphism modal.*
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/37d1ecce-a64a-46bc-a352-c2de92f8e795" width="95%" alt="Quick View Modal"/>
+  <img width="1372" height="795" alt="Screenshot 2026-05-27 at 2 47 38 PM" src="https://github.com/user-attachments/assets/c168b684-6539-4a83-b7e6-8c0352470aa0" />
 </div>
 
 <br/>
