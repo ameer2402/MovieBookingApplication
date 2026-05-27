@@ -309,8 +309,42 @@
     <!-- Backdrop Blur -->
     <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300" (click)="closeQuickView()"></div>
     
+    <!-- Skeleton Modal Content -->
+    <div *ngIf="isQuickViewLoading" class="relative w-full max-w-5xl bg-[#131313] border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row md:h-[550px] z-10">
+        <!-- Close Button -->
+        <button (click)="closeQuickView()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-primary-container text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <!-- Left Image Skeleton -->
+        <div class="w-full md:w-5/12 h-64 md:h-full bg-white/5 animate-pulse flex-shrink-0"></div>
+
+        <!-- Right Details Skeleton -->
+        <div class="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center gap-6">
+            <div class="flex gap-2">
+                <div class="w-16 h-6 bg-white/5 rounded animate-pulse"></div>
+                <div class="w-12 h-6 bg-white/5 rounded animate-pulse"></div>
+            </div>
+            
+            <div class="w-3/4 h-12 bg-white/5 rounded animate-pulse"></div>
+            
+            <div class="flex gap-4">
+                <div class="w-20 h-4 bg-white/5 rounded animate-pulse"></div>
+                <div class="w-32 h-4 bg-white/5 rounded animate-pulse"></div>
+            </div>
+            
+            <div class="space-y-3 mt-4">
+                <div class="w-full h-4 bg-white/5 rounded animate-pulse"></div>
+                <div class="w-full h-4 bg-white/5 rounded animate-pulse"></div>
+                <div class="w-5/6 h-4 bg-white/5 rounded animate-pulse"></div>
+            </div>
+
+            <div class="w-full h-16 bg-white/5 rounded-xl animate-pulse mt-auto"></div>
+        </div>
+    </div>
+
     <!-- Modal Content (3D Flip Animation, Fixed Size) -->
-    <div class="relative w-full max-w-5xl bg-[#131313] border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row transform-gpu animate-flip-in md:h-[550px]">
+    <div *ngIf="!isQuickViewLoading" class="relative w-full max-w-5xl bg-[#131313] border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row transform-gpu animate-flip-in md:h-[550px] z-10">
         
         <!-- Close Button -->
         <button (click)="closeQuickView()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-primary-container text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:rotate-90">

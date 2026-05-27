@@ -241,9 +241,11 @@ export class HomeComponent implements OnInit {
   selectedMovieForQuickView: any = null;
   quickViewScreenName: string = '';
   quickViewScreenAddress: string = '';
+  isQuickViewLoading: boolean = false;
 
   openQuickView(movie: any) {
     this.selectedMovieForQuickView = movie;
+    this.isQuickViewLoading = true;
     
     if (movie.selectedScreenId) {
         this.screenService.getScreenById(movie.selectedScreenId).subscribe(screen => {
@@ -251,14 +253,18 @@ export class HomeComponent implements OnInit {
             if (screen && screen.theatreId) {
                 this.theatreService.getTheatreById(screen.theatreId).subscribe(theatre => {
                     this.quickViewScreenAddress = theatre ? theatre.name + ', ' + theatre.state : 'CINEPRESTIGE Flagship Theatre';
-                });
+                    this.isQuickViewLoading = false;
+                }, () => this.isQuickViewLoading = false);
             } else {
                 this.quickViewScreenAddress = 'CINEPRESTIGE Flagship Theatre';
+                this.isQuickViewLoading = false;
             }
-        });
+        }, () => this.isQuickViewLoading = false);
     } else {
       this.quickViewScreenName = 'Premium Auditorium';
       this.quickViewScreenAddress = 'CINEPRESTIGE Flagship Theatre';
+      // Simulate slight delay for skeleton UI effect even if no data needed
+      setTimeout(() => this.isQuickViewLoading = false, 400);
     }
     
     // Stop carousel while viewing modal
