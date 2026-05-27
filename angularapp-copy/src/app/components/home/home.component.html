@@ -377,9 +377,13 @@
                 {{ selectedMovieForQuickView.title }}
             </h2>
             
-            <div class="flex items-center gap-4 text-on-surface-variant text-sm mb-6 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.5s_forwards]">
-                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> {{ selectedMovieForQuickView.duration }} min</span>
+            <div class="flex items-center gap-4 text-on-surface-variant text-sm mb-2 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.5s_forwards]">
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calendar_month</span> {{ selectedMovieForQuickView.showDate | date:'MMM d, yyyy' }} at {{ selectedMovieForQuickView.showTime }}</span>
                 <span class="w-1 h-1 bg-white/20 rounded-full"></span>
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> {{ selectedMovieForQuickView.duration }} min</span>
+            </div>
+            
+            <div class="flex items-center gap-4 text-on-surface-variant text-sm mb-6 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.5s_forwards]">
                 <span class="flex items-center gap-1 text-primary-container font-bold"><span class="material-symbols-outlined text-[16px]">location_on</span> {{ quickViewScreenName }}</span>
                 <span *ngIf="quickViewScreenAddress" class="flex items-center gap-1 text-on-surface-variant text-xs"><span class="material-symbols-outlined text-[14px]">map</span> {{ quickViewScreenAddress }}</span>
             </div>
