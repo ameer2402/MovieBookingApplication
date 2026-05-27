@@ -34,11 +34,12 @@ export class LoaderInterceptor implements HttpInterceptor {
       context = 'TICKET';
     }
 
-    this.loaderService.show(context);
+    // We have disabled the global loader per user request in favor of inline Skeleton UIs
+    // this.loaderService.show(context);
 
     return next.handle(request).pipe(
       finalize(() => {
-        this.loaderService.hide();
+        // this.loaderService.hide();
       })
     );
   }

@@ -76,8 +76,9 @@
                   
                   <h1 class="font-display-lg text-3xl md:text-4xl text-white mb-2 leading-tight drop-shadow-2xl">{{ movie.title }}</h1>
                   
-                  <p class="text-on-surface-variant mb-6 line-clamp-2 text-sm max-w-xl drop-shadow-lg">
-                      {{ movie.duration }} minutes. Experience the latest blockbuster only at CinePrestige.
+                  <p class="text-on-surface-variant mb-6 line-clamp-2 text-sm max-w-xl drop-shadow-lg flex items-center gap-2 font-bold">
+                      <span class="material-symbols-outlined text-[18px] text-primary-container">calendar_month</span>
+                      <span>{{ movie.showDate | date:'MMMM d, yyyy' }} at {{ movie.showTime }} • {{ movie.duration }} min</span>
                   </p>
                   
                   <button (click)="openQuickView(movie); $event.stopPropagation()" class="w-fit bg-primary-container text-on-primary-container px-6 py-2 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shadow-[0_0_30px_rgba(229,9,20,0.4)]">

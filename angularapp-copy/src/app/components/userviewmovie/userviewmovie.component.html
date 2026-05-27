@@ -25,6 +25,11 @@
           </div>
           
           <div class="detail-row">
+            <strong>Date & Time:</strong> 
+            <span>{{ movie.showDate | date:'MMM d, yyyy' }} at {{ movie.showTime }}</span>
+          </div>
+          
+          <div class="detail-row">
             <strong>Duration:</strong> 
             <span>{{ movie.duration }} minutes</span>
           </div>
