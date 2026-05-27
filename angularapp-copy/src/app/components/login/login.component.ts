@@ -42,6 +42,18 @@ export class LoginComponent implements OnInit {
       this.authService.login(loginData).subscribe({
         next:(user:any)=>{
           this.isSubmitting = false;
+          
+          // Role enforcement based on which login portal was used
+          if (this.isAdminView && user.role !== 'ADMIN' && user.role !== 'THEATRE_OWNER') {
+              this.toastService.showError('Access Denied', 'You do not have administrative privileges. Please use the User Login.');
+              return;
+          }
+          
+          if (!this.isAdminView && (user.role === 'ADMIN' || user.role === 'THEATRE_OWNER')) {
+              this.toastService.showError('Access Denied', 'Administrators must sign in through the Admin Portal.');
+              return;
+          }
+
           this.userStore.setUser(user);
           this.toastService.showSuccess('Login Successful', 'Welcome back!');
           this.redirectBasedOnRole();
