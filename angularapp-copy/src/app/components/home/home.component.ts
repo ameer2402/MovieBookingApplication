@@ -246,6 +246,12 @@ export class HomeComponent implements OnInit {
   encodeTitle(title: string): string {
     return encodeURIComponent(title || 'Movie');
   }
+  
+  isWidePoster(title: string): boolean {
+    if (!title) return false;
+    const t = title.toLowerCase();
+    return t.includes('dangal') || t.includes('chak de india');
+  }
 
   // --- CAROUSEL LOGIC ---
   currentSlide = 0;
