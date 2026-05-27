@@ -367,6 +367,7 @@
             
             <div class="flex items-center gap-2 mb-3 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.3s_forwards]">
                 <span class="px-2 py-1 bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/5">{{ selectedMovieForQuickView.genre }}</span>
+                <span class="px-2 py-1 bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/5">{{ selectedMovieForQuickView.language || 'EN' }}</span>
                 <span *ngIf="selectedMovieForQuickView.rating" class="flex items-center gap-1 text-secondary text-xs font-bold bg-secondary/10 px-2 py-1 rounded">
                     <span class="material-symbols-outlined text-[14px]">star</span>
                     {{ selectedMovieForQuickView.rating | number:'1.1-1' }}
