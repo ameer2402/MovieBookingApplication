@@ -264,27 +264,18 @@ export class HomeComponent implements OnInit {
 
   openQuickView(movie: any) {
     this.selectedMovieForQuickView = movie;
-    this.isQuickViewLoading = true;
     
-    if (movie.selectedScreenId) {
-        this.screenService.getScreenById(movie.selectedScreenId).subscribe(screen => {
-            this.quickViewScreenName = screen ? screen.name : 'Premium Auditorium';
-            if (screen && screen.theatreId) {
-                this.theatreService.getTheatreById(screen.theatreId).subscribe(theatre => {
-                    this.quickViewScreenAddress = theatre ? theatre.name + ', ' + theatre.state : 'CINEPRESTIGE Flagship Theatre';
-                    this.isQuickViewLoading = false;
-                }, () => this.isQuickViewLoading = false);
-            } else {
-                this.quickViewScreenAddress = 'CINEPRESTIGE Flagship Theatre';
-                this.isQuickViewLoading = false;
-            }
-        }, () => this.isQuickViewLoading = false);
+    // We already have city and theatreName resolved in loadMovies()!
+    // No need to fetch from backend, make it instant.
+    if (movie.theatreName) {
+      this.quickViewScreenName = movie.theatreName;
+      this.quickViewScreenAddress = movie.city || 'CINEPRESTIGE Flagship Theatre';
     } else {
       this.quickViewScreenName = 'Premium Auditorium';
       this.quickViewScreenAddress = 'CINEPRESTIGE Flagship Theatre';
-      // Simulate slight delay for skeleton UI effect even if no data needed
-      setTimeout(() => this.isQuickViewLoading = false, 400);
     }
+    
+    this.isQuickViewLoading = false;
     
     // Stop carousel while viewing modal
     if (this.slideInterval) clearInterval(this.slideInterval);
