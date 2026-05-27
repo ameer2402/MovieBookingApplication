@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Movie } from '../models/movie.model';
 import { environment } from '../../environments/environment';
@@ -16,7 +16,8 @@ export class MovieService {
     return this.http.post<Movie>(this.apiUrl,movie);
   }
   getAllMovies():Observable<Movie[]>{
-    return this.http.get<Movie[]>(this.apiUrl);
+    const headers = new HttpHeaders({ 'X-Skip-Loader': 'true' });
+    return this.http.get<Movie[]>(this.apiUrl, { headers });
   }
   getMovieById(movieId:number):Observable<Movie>{
     return this.http.get<Movie>(this.apiUrl+"/"+movieId);

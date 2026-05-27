@@ -13,6 +13,7 @@ import { ScreenConfig } from 'src/app/models/screen.model';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  isInitialLoading: boolean = true;
   heroTransform: string = 'scale(1) translate(0px, 0px)';
   
   masterMoviesList: Movie[] = [];
@@ -101,9 +102,11 @@ export class HomeComponent implements OnInit {
         });
         
         this.filterAndCategorizeMovies();
+        this.isInitialLoading = false;
       },
       (error) => {
         console.error('Failed to load movies for home page', error);
+        this.isInitialLoading = false;
       }
     );
   }

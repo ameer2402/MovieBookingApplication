@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ScreenConfig } from '../models/screen.model';
 import { environment } from '../../environments/environment';
@@ -13,7 +13,8 @@ export class ScreenService {
   constructor(private http: HttpClient) { }
 
   getAllScreens(): Observable<ScreenConfig[]> {
-    return this.http.get<ScreenConfig[]>(this.apiUrl);
+    const headers = new HttpHeaders({ 'X-Skip-Loader': 'true' });
+    return this.http.get<ScreenConfig[]>(this.apiUrl, { headers });
   }
 
   getScreensByTheatreId(theatreId: string): Observable<ScreenConfig[]> {

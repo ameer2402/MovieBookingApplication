@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Theatre } from '../models/theatre.model';
 import { environment } from '../../environments/environment';
@@ -13,7 +13,8 @@ export class TheatreService {
   constructor(private http: HttpClient) { }
 
   getAllTheatres(): Observable<Theatre[]> {
-    return this.http.get<Theatre[]>(this.apiUrl);
+    const headers = new HttpHeaders({ 'X-Skip-Loader': 'true' });
+    return this.http.get<Theatre[]>(this.apiUrl, { headers });
   }
 
   getTheatreById(id: string): Observable<Theatre> {

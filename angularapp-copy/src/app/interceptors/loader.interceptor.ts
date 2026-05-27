@@ -15,6 +15,14 @@ export class LoaderInterceptor implements HttpInterceptor {
   constructor(private loaderService: LoaderService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    
+    // Check if the request explicitly wants to bypass the global loader (e.g. initial skeleton load)
+    if (request.headers.has('X-Skip-Loader')) {
+      const headers = request.headers.delete('X-Skip-Loader');
+      const modifiedRequest = request.clone({ headers });
+      return next.handle(modifiedRequest);
+    }
+
     let context = 'DEFAULT';
     const url = request.url.toLowerCase();
 
