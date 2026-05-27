@@ -24,11 +24,11 @@
 
 ---
 
-## 🌟 Overview (For Recruiters & Engineering Managers)
+## 🌟 Overview
 
 **CinePrestige** is an enterprise-grade, full-stack Movie Booking Application engineered to deliver a seamless, high-end user experience reminiscent of premium streaming platforms. It demonstrates full-stack proficiency, combining a robust, secure **Java Spring Boot backend** with a highly dynamic, animated **Angular 17 frontend**.
 
-### 💼 Technical Highlights for Recruiters:
+### 💼 Technical Highlights:
 - **Cloud-Native & Containerized**: Backend is fully containerized using **Docker** and deployed on Render Cloud, ensuring environment consistency from local development to production.
 - **Advanced State & UI/UX**: Implemented complex front-end features including **Skeleton UI loading states**, dynamic 3D CSS carousels, and staggered cinematic entry animations to eliminate layout shift and provide a premium feel.
 - **Secure Architecture**: Implemented **Spring Security** for robust authentication. Strict Role-Based Access Control (RBAC) securely separates `USER` and `ADMIN` privileges at both the API and routing levels.
