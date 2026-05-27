@@ -56,11 +56,11 @@
             <div class="mt-stack-md flex flex-wrap gap-4 items-center">
                 <!-- If Movie is in the Future -->
                 <ng-container *ngIf="!isMovieInPast(booking)">
-                    <button (click)="openQRModal(booking)" class="bg-primary-container text-on-primary-container px-6 py-3 rounded-lg font-label-lg text-label-lg flex items-center gap-2 hover:opacity-90 transition-all active:scale-95">
+                    <button (click)="openQRModal(booking)" class="w-full sm:w-auto justify-center bg-primary-container text-on-primary-container px-6 py-3 rounded-lg font-label-lg text-label-lg flex items-center gap-2 hover:opacity-90 transition-all active:scale-95">
                         <span class="material-symbols-outlined">qr_code_2</span>
                         View QR Ticket
                     </button>
-                    <button (click)="downloadPDF(booking)" class="border border-white/20 text-on-surface px-6 py-3 rounded-lg font-label-lg text-label-lg flex items-center gap-2 hover:bg-white/5 transition-all">
+                    <button (click)="downloadPDF(booking)" class="w-full sm:w-auto justify-center border border-white/20 text-on-surface px-6 py-3 rounded-lg font-label-lg text-label-lg flex items-center gap-2 hover:bg-white/5 transition-all">
                         <span class="material-symbols-outlined">download</span>
                         Download PDF
                     </button>

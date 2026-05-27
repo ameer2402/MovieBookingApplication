@@ -26,7 +26,7 @@
         <div class="relative group">
           <label class="font-label-md text-label-md text-on-surface-variant mb-1 block uppercase tracking-wider" for="username">Username</label>
           <div class="relative">
-            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="username" name="username" ngModel required #username="ngModel" placeholder="Choose a username" type="text"/>
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 md:py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="username" name="username" ngModel required #username="ngModel" placeholder="Choose a username" type="text"/>
             <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
             <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
           </div>
@@ -39,7 +39,7 @@
         <div class="relative group">
           <label class="font-label-md text-label-md text-on-surface-variant mb-1 block uppercase tracking-wider" for="email">Email Address</label>
           <div class="relative">
-            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="email" name="email" ngModel required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #email="ngModel" placeholder="name@cinema.com" type="email"/>
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 md:py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="email" name="email" ngModel required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #email="ngModel" placeholder="name@cinema.com" type="email"/>
             <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
             <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
           </div>
@@ -53,7 +53,7 @@
         <div class="relative group">
           <label class="font-label-md text-label-md text-on-surface-variant mb-1 block uppercase tracking-wider" for="password">Password</label>
           <div class="relative">
-            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="password" name="password" ngModel required #password="ngModel" placeholder="Create a password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" type="password"/>
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 md:py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="password" name="password" ngModel required #password="ngModel" placeholder="Create a password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" type="password"/>
             <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
             <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
           </div>
@@ -67,7 +67,7 @@
         <div class="relative group">
           <label class="font-label-md text-label-md text-on-surface-variant mb-1 block uppercase tracking-wider" for="confirmPassword">Confirm Password</label>
           <div class="relative">
-            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="confirmPassword" name="confirmPassword" ngModel required #confirmPassword="ngModel" placeholder="Confirm your password" type="password"/>
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 md:py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="confirmPassword" name="confirmPassword" ngModel required #confirmPassword="ngModel" placeholder="Confirm your password" type="password"/>
             <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
             <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
           </div>
@@ -80,7 +80,7 @@
         <div class="relative group">
           <label class="font-label-md text-label-md text-on-surface-variant mb-1 block uppercase tracking-wider" for="mobile">Mobile Number</label>
           <div class="relative">
-            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="mobile" name="mobileNumber" ngModel required pattern="^\d{10}$" #mobile="ngModel" placeholder="Enter 10-digit mobile number" type="tel"/>
+            <input class="w-full bg-[#1A1A1A] border-none text-on-surface font-body-md py-3 md:py-4 px-0 focus:ring-0 placeholder:text-surface-variant transition-all" id="mobile" name="mobileNumber" ngModel required pattern="^\d{10}$" #mobile="ngModel" placeholder="Enter 10-digit mobile number" type="tel"/>
             <div class="absolute bottom-0 left-0 h-[2px] bg-white/20 w-full"></div>
             <div class="absolute bottom-0 left-0 h-[2px] bg-primary-container w-0 input-focus-line"></div>
           </div>
@@ -91,7 +91,7 @@
         </div>
 
         <!-- Register Button -->
-        <button [disabled]="registerForm.invalid || confirmPassword.value !== password.value || isSubmitting" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+        <button [disabled]="registerForm.invalid || confirmPassword.value !== password.value || isSubmitting" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-3 md:py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
           <span *ngIf="!isSubmitting">Register</span>
           <span *ngIf="isSubmitting">Creating Account...</span>
           <span *ngIf="!isSubmitting" class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
