@@ -8,18 +8,44 @@
          <div class="w-full max-w-2xl mb-20 relative">
              <div class="h-1.5 w-full bg-white/5 rounded-full animate-pulse"></div>
              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[110%] h-32 bg-primary-container/5 rounded-[50%] -z-10 animate-pulse blur-xl"></div>
+             <div class="text-center mt-stack-sm font-label-md text-label-md text-on-surface-variant/50 tracking-widest uppercase">Screen This Way</div>
+         </div>
+
+         <!-- Seat Grid Legend -->
+         <div class="flex flex-wrap justify-center gap-6 mb-12 opacity-50">
+           <div class="flex items-center gap-2">
+             <div class="w-5 h-5 rounded-sm border border-outline bg-transparent"></div>
+             <span class="text-label-md font-label-md text-on-surface-variant">Available</span>
+           </div>
+           <div class="flex items-center gap-2">
+             <div class="w-5 h-5 rounded-sm bg-primary-container shadow-[0_0_8px_rgba(229,9,20,0.4)]"></div>
+             <span class="text-label-md font-label-md text-on-surface-variant">Selected</span>
+           </div>
+           <div class="flex items-center gap-2">
+             <div class="w-5 h-5 rounded-sm bg-surface-container-highest opacity-40"></div>
+             <span class="text-label-md font-label-md text-on-surface-variant">Occupied</span>
+           </div>
          </div>
          
          <!-- Fake Seat Map -->
-         <div class="w-full flex flex-col gap-8 items-center opacity-40">
-            <div class="grid grid-cols-10 gap-2 md:gap-3 w-max mx-auto">
-                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10]" class="w-6 h-6 md:w-8 md:h-8 rounded-sm bg-white/10 animate-pulse"></div>
+         <div class="w-full flex flex-col gap-6 overflow-x-auto pb-8 items-center opacity-40">
+            <div class="space-y-3">
+                <div class="text-center text-label-md font-label-md text-outline-variant mb-2">STANDARD</div>
+                <div class="grid grid-cols-10 gap-2 md:gap-3 w-max mx-auto">
+                    <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10]" class="w-6 h-6 md:w-8 md:h-8 rounded-sm bg-white/10 animate-pulse"></div>
+                </div>
             </div>
-            <div class="grid grid-cols-12 gap-2 md:gap-3 w-max mx-auto mt-4">
-                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12]" class="w-6 h-6 md:w-8 md:h-8 rounded-sm bg-white/10 animate-pulse"></div>
+            <div class="space-y-3 mt-4">
+                <div class="text-center text-label-md font-label-md text-secondary mb-2">VIP EXPERIENCE</div>
+                <div class="grid grid-cols-12 gap-2 md:gap-3 w-max mx-auto">
+                    <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12]" class="w-6 h-6 md:w-8 md:h-8 rounded-sm bg-white/10 animate-pulse"></div>
+                </div>
             </div>
-            <div class="grid grid-cols-8 gap-4 md:gap-6 w-max mx-auto mt-4">
-                <div *ngFor="let i of [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8]" class="w-8 h-10 md:w-10 md:h-12 rounded-lg bg-white/10 animate-pulse"></div>
+            <div class="space-y-3 mt-4">
+                <div class="text-center text-label-md font-label-md text-tertiary mb-2">PLATINUM RECLINERS</div>
+                <div class="grid grid-cols-8 gap-4 md:gap-6 w-max mx-auto">
+                    <div *ngFor="let i of [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8]" class="w-8 h-10 md:w-10 md:h-12 rounded-lg bg-white/10 animate-pulse"></div>
+                </div>
             </div>
          </div>
       </section>
@@ -27,8 +53,14 @@
       <!-- Skeleton Right Sidebar -->
       <aside class="lg:col-span-4 w-full">
          <div class="glass-panel rounded-xl p-8 sticky top-28 flex flex-col gap-6 w-full max-w-sm mx-auto lg:max-w-none border border-white/5">
-            <div class="w-full h-40 rounded-lg bg-white/5 animate-pulse mb-2"></div>
-            <div class="h-8 w-3/4 bg-white/5 animate-pulse rounded"></div>
+            <div class="flex gap-4 items-end mb-2">
+                <div class="w-24 aspect-[2/3] rounded-lg bg-white/5 animate-pulse flex-shrink-0"></div>
+                <div class="flex-grow space-y-2 pb-2">
+                    <div class="h-4 w-16 bg-white/5 animate-pulse rounded"></div>
+                    <div class="h-6 w-full bg-white/5 animate-pulse rounded"></div>
+                    <div class="h-6 w-3/4 bg-white/5 animate-pulse rounded"></div>
+                </div>
+            </div>
             <div class="flex gap-4">
                 <div class="h-4 w-1/4 bg-white/5 animate-pulse rounded"></div>
                 <div class="h-4 w-1/3 bg-white/5 animate-pulse rounded"></div>
@@ -138,20 +170,21 @@
   <aside class="lg:col-span-4 w-full">
     <div class="glass-panel rounded-xl p-8 sticky top-28 flex flex-col gap-6 w-full max-w-sm mx-auto lg:max-w-none">
       
-      <!-- Movie Backdrop Mini -->
-      <div class="relative w-full h-40 rounded-lg overflow-hidden mb-2">
-        <img [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://image.pollinations.ai/prompt/movie%20poster%20for%20' + movie.title + '?width=400&height=200&nologo=true')" 
-             [alt]="movie.title" 
-             onerror="this.src='https://via.placeholder.com/400x200?text=Movie'"
-             class="w-full h-full object-cover"/>
-        <div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
-        <div class="absolute bottom-4 left-4">
-          <span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">{{ movie.genre }}</span>
+      <!-- Movie Poster and Title -->
+      <div class="flex gap-4 items-end mb-2">
+        <div class="w-24 aspect-[2/3] rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+          <img [src]="$any(movie).posterBase64 ? $any(movie).posterBase64 : ('https://image.pollinations.ai/prompt/movie%20poster%20for%20' + movie.title + '?width=400&height=600&nologo=true')" 
+               [alt]="movie.title" 
+               onerror="this.src='https://via.placeholder.com/400x600?text=Movie'"
+               class="w-full h-full object-cover"/>
+        </div>
+        <div class="pb-2">
+          <span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mb-2 inline-block">{{ movie.genre }}</span>
+          <h2 class="font-headline-md text-headline-sm text-on-surface leading-tight">{{ movie.title }}</h2>
         </div>
       </div>
 
       <div>
-        <h2 class="font-headline-md text-headline-md text-on-surface">{{ movie.title }}</h2>
         <div class="flex items-center gap-4 mt-2 text-on-surface-variant font-label-md">
           <div class="flex items-center gap-1">
             <span class="material-symbols-outlined text-sm">schedule</span>
