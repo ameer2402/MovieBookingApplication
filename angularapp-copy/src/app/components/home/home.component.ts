@@ -114,6 +114,11 @@ export class HomeComponent implements OnInit {
                   }
               }
           }
+          
+          // Pre-process arrays for UI badges
+          m.languagesArray = m.language ? m.language.split(/[\/,]/).map((l: string) => l.trim()).filter((l: string) => l) : ['EN'];
+          m.genresArray = m.genre ? m.genre.split(/[\/,]/).map((g: string) => g.trim()).filter((g: string) => g) : ['GENERAL'];
+          
           return m;
         });
         
@@ -179,13 +184,15 @@ export class HomeComponent implements OnInit {
         });
       }
       
-      // Group by Language
-      if (movie.language) {
-          if (!this.moviesByLanguage[movie.language]) {
-              this.moviesByLanguage[movie.language] = [];
-              this.languageKeys.push(movie.language);
-          }
-          this.moviesByLanguage[movie.language].push(movie);
+      // Group by Language (Handling multi-language)
+      if (movie.languagesArray) {
+          movie.languagesArray.forEach((lang: string) => {
+              if (!this.moviesByLanguage[lang]) {
+                  this.moviesByLanguage[lang] = [];
+                  this.languageKeys.push(lang);
+              }
+              this.moviesByLanguage[lang].push(movie);
+          });
       }
       
       // 3. Top Rated Movies (sort by rating descending)

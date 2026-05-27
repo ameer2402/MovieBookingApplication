@@ -365,9 +365,9 @@
         <!-- Right Details with staggered slide-up -->
         <div class="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative z-10 overflow-y-auto">
             
-            <div class="flex items-center gap-2 mb-3 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.3s_forwards]">
-                <span class="px-2 py-1 bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/5">{{ selectedMovieForQuickView.genre }}</span>
-                <span class="px-2 py-1 bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/5">{{ selectedMovieForQuickView.language || 'EN' }}</span>
+            <div class="flex items-center gap-2 mb-3 opacity-0 animate-[slide-up-fade_0.5s_ease-out_0.3s_forwards] flex-wrap">
+                <span *ngFor="let genre of selectedMovieForQuickView.genresArray" class="px-2 py-1 bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/5">{{ genre }}</span>
+                <span *ngFor="let lang of selectedMovieForQuickView.languagesArray" class="px-2 py-1 bg-surface-container-high text-on-surface text-[10px] font-bold uppercase tracking-wider rounded border border-white/10">{{ lang }}</span>
                 <span *ngIf="selectedMovieForQuickView.rating" class="flex items-center gap-1 text-secondary text-xs font-bold bg-secondary/10 px-2 py-1 rounded">
                     <span class="material-symbols-outlined text-[14px]">star</span>
                     {{ selectedMovieForQuickView.rating | number:'1.1-1' }}

@@ -57,6 +57,13 @@ export class UserbookingmovieComponent implements OnInit {
   loadMovieDetails(): void {
     this.movieService.getMovieById(this.movieId).subscribe(
       (data) => {
+        this.movie = data;
+        
+        // Pre-process arrays for UI badges
+        const movieAny: any = this.movie;
+        movieAny.languagesArray = this.movie.language ? this.movie.language.split(/[\/,]/).map(l => l.trim()).filter(l => l) : ['EN'];
+        movieAny.genresArray = this.movie.genre ? this.movie.genre.split(/[\/,]/).map(g => g.trim()).filter(g => g) : ['GENERAL'];
+        
         // Parse dynamic pricing and blocked seats from DB model if available
         if (data.categoryPrices) {
             this.movieExtras = { categoryPrices: typeof data.categoryPrices === 'string' ? JSON.parse(data.categoryPrices) : data.categoryPrices };

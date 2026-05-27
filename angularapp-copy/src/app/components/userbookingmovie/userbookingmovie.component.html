@@ -183,8 +183,8 @@
         </div>
         <div class="pb-2">
           <div class="flex flex-wrap gap-2 mb-2">
-            <span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block">{{ movie.genre }}</span>
-            <span class="bg-surface-container-high border border-white/10 text-on-surface px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block">{{ movie.language || 'EN' }}</span>
+            <span *ngFor="let genre of $any(movie).genresArray" class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block">{{ genre }}</span>
+            <span *ngFor="let lang of $any(movie).languagesArray" class="bg-surface-container-high border border-white/10 text-on-surface px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block">{{ lang }}</span>
           </div>
           <h2 class="font-headline-md text-headline-sm text-on-surface leading-tight">{{ movie.title }}</h2>
         </div>
