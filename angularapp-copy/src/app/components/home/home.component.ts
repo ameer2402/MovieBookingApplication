@@ -68,6 +68,22 @@ export class HomeComponent implements OnInit {
   }
   
   loadMovies(): void {
+    // 1. Instant Cache Load (Stale-While-Revalidate)
+    const cachedData = localStorage.getItem('homeMoviesCache');
+    if (cachedData) {
+        try {
+            const parsed = JSON.parse(cachedData);
+            this.masterMoviesList = parsed;
+            this.filterAndCategorizeMovies();
+            this.isInitialLoading = false; // Bypass skeleton UI instantly
+        } catch(e) {
+            this.isInitialLoading = true;
+        }
+    } else {
+        this.isInitialLoading = true;
+    }
+
+    // 2. Background Revalidation
     forkJoin({
       movies: this.movieService.getAllMovies(),
       theatres: this.theatreService.getAllTheatres(),
@@ -100,6 +116,9 @@ export class HomeComponent implements OnInit {
           }
           return m;
         });
+        
+        // Cache the fully processed list
+        localStorage.setItem('homeMoviesCache', JSON.stringify(this.masterMoviesList));
         
         this.filterAndCategorizeMovies();
         this.isInitialLoading = false;

@@ -91,9 +91,11 @@
         </div>
 
         <!-- Register Button -->
-        <button [disabled]="registerForm.invalid || confirmPassword.value !== password.value" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
-          Register
-          <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+        <button [disabled]="registerForm.invalid || confirmPassword.value !== password.value || isSubmitting" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+          <span *ngIf="!isSubmitting">Register</span>
+          <span *ngIf="isSubmitting">Creating Account...</span>
+          <span *ngIf="!isSubmitting" class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+          <span *ngIf="isSubmitting" class="material-symbols-outlined text-[20px] animate-spin">refresh</span>
         </button>
       </form>
 

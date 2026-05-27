@@ -62,9 +62,11 @@
         </div>
 
         <!-- Sign In Button -->
-        <button [disabled]="loginForm.invalid" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
-          Sign In
-          <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+        <button [disabled]="loginForm.invalid || isSubmitting" class="mt-stack-sm bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:brightness-110 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+          <span *ngIf="!isSubmitting">Sign In</span>
+          <span *ngIf="isSubmitting">Authenticating...</span>
+          <span *ngIf="!isSubmitting" class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+          <span *ngIf="isSubmitting" class="material-symbols-outlined text-[20px] animate-spin">refresh</span>
         </button>
       </form>
 
@@ -117,9 +119,11 @@
           </div>
 
           <!-- Access Button -->
-          <button [disabled]="adminForm.invalid" class="w-full mt-stack-md bg-primary-container text-on-primary-container font-headline-sm text-headline-sm py-4 rounded-lg shadow-lg hover:brightness-110 active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
-            <span>Access Portal</span>
-            <span class="material-symbols-outlined">login</span>
+          <button [disabled]="adminForm.invalid || isSubmitting" class="w-full mt-stack-md bg-primary-container text-on-primary-container font-headline-sm text-headline-sm py-4 rounded-lg shadow-lg hover:brightness-110 active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+            <span *ngIf="!isSubmitting">Access Portal</span>
+            <span *ngIf="isSubmitting">Authenticating...</span>
+            <span *ngIf="!isSubmitting" class="material-symbols-outlined">login</span>
+            <span *ngIf="isSubmitting" class="material-symbols-outlined animate-spin">refresh</span>
           </button>
         </form>
 
