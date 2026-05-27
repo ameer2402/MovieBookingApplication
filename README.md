@@ -15,8 +15,8 @@
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/Architecture-Microservices_Ready-E50914?style=for-the-badge&labelColor=000000"/>
-  <img src="https://img.shields.io/badge/Security-JWT_Authentication-00C853?style=for-the-badge&labelColor=000000"/>
+  <img src="https://img.shields.io/badge/Architecture-Monolithic_Design-E50914?style=for-the-badge&labelColor=000000"/>
+  <img src="https://img.shields.io/badge/Security-Spring_Security-00C853?style=for-the-badge&labelColor=000000"/>
   <img src="https://img.shields.io/badge/Deployment-Render_Cloud-4285F4?style=for-the-badge&labelColor=000000"/>
 </p>
 
@@ -31,7 +31,7 @@
 ### 💼 Technical Highlights for Recruiters:
 - **Cloud-Native & Containerized**: Backend is fully containerized using **Docker** and deployed on Render Cloud, ensuring environment consistency from local development to production.
 - **Advanced State & UI/UX**: Implemented complex front-end features including **Skeleton UI loading states**, dynamic 3D CSS carousels, and staggered cinematic entry animations to eliminate layout shift and provide a premium feel.
-- **Secure Architecture**: Implemented **Spring Security** with **JWT (JSON Web Tokens)** for stateless authentication. Strict Role-Based Access Control (RBAC) securely separates `USER` and `ADMIN` privileges at both the API and routing levels.
+- **Secure Architecture**: Implemented **Spring Security** for robust authentication. Strict Role-Based Access Control (RBAC) securely separates `USER` and `ADMIN` privileges at both the API and routing levels.
 - **Database Optimization**: Engineered relational mappings using Hibernate/JPA connected to a live **Aiven MySQL** database, handling complex associations between Theatres, Screens, Movies, and dynamic Seat Bookings.
 - **Performance Engineering**: Utilized local caching strategies (stale-while-revalidate) and optimized asynchronous API calls via RxJS to drastically reduce Time-to-Interactive (TTI).
 
@@ -43,7 +43,7 @@
   <tr>
     <td width="50%">
       <h3>🔐 Role-Based Portals</h3>
-      <p>Strictly separated User and Admin interfaces. Admins manage inventory (Theatres, Screens, Movies) while Users browse and book. Enforced via Route Guards and JWT validation.</p>
+      <p>Strictly separated User and Admin interfaces. Admins manage inventory (Theatres, Screens, Movies) while Users browse and book. Enforced via Angular Route Guards and backend validation.</p>
     </td>
     <td width="50%">
       <h3>🎟️ Dynamic Seat Matrix</h3>
@@ -119,7 +119,7 @@
         ║  (TailwindCSS, RxJS, Route Guards, Caching)  ║
         ╚══════════════════════════════════════════════╝
                                │
-                               │ REST API (JSON) + JWT
+                               │ REST API (JSON)
                                ▼
         ╔══════════════════════════════════════════════╗
         ║         ⚙️ SPRING BOOT REST BACKEND          ║
@@ -143,7 +143,7 @@
 | ⚛️ **Frontend** | `Angular 17`, `TypeScript` | Component-based SPA framework |
 | 🎨 **Styling** | `TailwindCSS` | Utility-first responsive design & animations |
 | ⚙️ **Backend** | `Java 17`, `Spring Boot 3` | Robust REST API architecture |
-| 🔐 **Security** | `Spring Security`, `JWT` | Stateless authentication & authorization |
+| 🔐 **Security** | `Spring Security` | Authentication & authorization |
 | 🗄️ **Database** | `MySQL` (Aiven Cloud) | Persistent relational data storage |
 | 🐳 **DevOps** | `Docker`, `Render Cloud` | Containerized build and deployment |
 
